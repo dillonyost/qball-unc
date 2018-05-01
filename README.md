@@ -34,7 +34,7 @@ To compile Qbox:
 2. Now you need to determine how to run the configure script. Since Qball depends on some non-standard libraries you might need to set some environment variables and to add some flags to tell qball where to find those libraries.
 
   | Environment variable | Description             | Note                  |
-  |----------------------|-------------------------|-----------------------|
+  | -------------------- |------------------------ | --------------------- |
   | CC                   | C compiler              | Default is mpicc      |
   | CXX                  | C++ compiler            | Default is mpic++     |
   | FC                   | Fortran compiler        | Default is mpif90. Used only to detect Fortran libraries.|
