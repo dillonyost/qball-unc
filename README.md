@@ -46,16 +46,16 @@ To compile Qbox:
 | LIBS_BLAS            | Compilation flags to add the blas library |     |
 
 
-  | Flag                  | Value                          | Note                  |
-  |-----------------------|--------------------------------|-----------------------|
-  | --prefix=             | installation directory         | default is /usr/local |
-  | --with-fftw3-prefix=  | path where fftw3 is installed  |                       |
-  | --with-fftw2-prefix=  | path where fftw2 is installed  |                       |
-  | --with-essl-prefix=   | path where the IBM ESSL library is installed |         |
-  | --with-blas=          | path where the Blas library file is located  | you can also use LIBS_BLAS |
-  | --with-lapack=        | path where the lapack library file is located |        |
-  | --with-blacs=         | path where the blacs library file is located | you can also pass the location of scalapack |
-  | --with-scalapack=     | path where the scalapack file is located |             |
+| Flag                  | Value                          | Note                  |
+|-----------------------|--------------------------------|-----------------------|
+| --prefix=             | installation directory         | default is /usr/local |
+| --with-fftw3-prefix=  | path where fftw3 is installed  |                       |
+| --with-fftw2-prefix=  | path where fftw2 is installed  |                       |
+| --with-essl-prefix=   | path where the IBM ESSL library is installed |         |
+| --with-blas=          | path where the Blas library file is located  | you can also use LIBS_BLAS |
+| --with-lapack=        | path where the lapack library file is located |        |
+| --with-blacs=         | path where the blacs library file is located | you can also pass the location of scalapack |
+| --with-scalapack=     | path where the scalapack file is located |             |
 
   For example, for a Blue Gene/Q system, you configure script might look something like this:
 
