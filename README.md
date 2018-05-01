@@ -56,6 +56,7 @@ To compile Qbox:
 | --with-lapack=        | path where the lapack library file is located |        |
 | --with-blacs=         | path where the blacs library file is located | you can also pass the location of scalapack |
 | --with-scalapack=     | path where the scalapack file is located |             |
+| --with-libxc-prefix=     | path where the libxc file is located |             |
 
   For example, for a Blue Gene/Q system, you configure script might look something like this:
 
