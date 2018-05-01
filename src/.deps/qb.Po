@@ -1,0 +1,924 @@
+qb.o: qb.C /usr/include/c++/4.8.5/iostream \
+ /usr/include/c++/4.8.5/x86_64-redhat-linux/bits/c++config.h \
+ /usr/include/bits/wordsize.h \
+ /usr/include/c++/4.8.5/x86_64-redhat-linux/bits/os_defines.h \
+ /usr/include/features.h /usr/include/stdc-predef.h /usr/include/sys/cdefs.h \
+ /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h \
+ /usr/include/gnu/stubs-64.h \
+ /usr/include/c++/4.8.5/x86_64-redhat-linux/bits/cpu_defines.h \
+ /usr/include/c++/4.8.5/ostream /usr/include/c++/4.8.5/ios \
+ /usr/include/c++/4.8.5/iosfwd /usr/include/c++/4.8.5/bits/stringfwd.h \
+ /usr/include/c++/4.8.5/bits/memoryfwd.h /usr/include/c++/4.8.5/bits/postypes.h \
+ /usr/include/c++/4.8.5/cwchar /usr/include/wchar.h /usr/include/stdio.h \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/stdarg.h \
+ /usr/include/bits/wchar.h /usr/include/bits/wordsize.h \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/stddef.h \
+ /usr/include/xlocale.h /usr/include/c++/4.8.5/exception \
+ /usr/include/c++/4.8.5/bits/atomic_lockfree_defines.h \
+ /usr/include/c++/4.8.5/bits/char_traits.h \
+ /usr/include/c++/4.8.5/bits/stl_algobase.h \
+ /usr/include/c++/4.8.5/bits/functexcept.h \
+ /usr/include/c++/4.8.5/bits/exception_defines.h \
+ /usr/include/c++/4.8.5/bits/cpp_type_traits.h \
+ /usr/include/c++/4.8.5/ext/type_traits.h \
+ /usr/include/c++/4.8.5/ext/numeric_traits.h \
+ /usr/include/c++/4.8.5/bits/stl_pair.h /usr/include/c++/4.8.5/bits/move.h \
+ /usr/include/c++/4.8.5/bits/concept_check.h \
+ /usr/include/c++/4.8.5/bits/stl_iterator_base_types.h \
+ /usr/include/c++/4.8.5/bits/stl_iterator_base_funcs.h \
+ /usr/include/c++/4.8.5/debug/debug.h /usr/include/c++/4.8.5/bits/stl_iterator.h \
+ /usr/include/c++/4.8.5/cwchar /usr/include/wchar.h \
+ /usr/include/c++/4.8.5/bits/localefwd.h \
+ /usr/include/c++/4.8.5/x86_64-redhat-linux/bits/c++locale.h \
+ /usr/include/c++/4.8.5/clocale /usr/include/locale.h \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/stddef.h \
+ /usr/include/bits/locale.h /usr/include/c++/4.8.5/cctype /usr/include/ctype.h \
+ /usr/include/bits/types.h /usr/include/bits/wordsize.h \
+ /usr/include/bits/typesizes.h /usr/include/endian.h /usr/include/bits/endian.h \
+ /usr/include/bits/byteswap.h /usr/include/bits/wordsize.h \
+ /usr/include/bits/byteswap-16.h /usr/include/c++/4.8.5/bits/ios_base.h \
+ /usr/include/c++/4.8.5/ext/atomicity.h \
+ /usr/include/c++/4.8.5/x86_64-redhat-linux/bits/gthr.h \
+ /usr/include/c++/4.8.5/x86_64-redhat-linux/bits/gthr-default.h \
+ /usr/include/pthread.h /usr/include/sched.h \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/stddef.h \
+ /usr/include/time.h /usr/include/bits/sched.h /usr/include/time.h \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/stddef.h \
+ /usr/include/bits/time.h /usr/include/bits/timex.h \
+ /usr/include/bits/pthreadtypes.h /usr/include/bits/wordsize.h \
+ /usr/include/bits/setjmp.h /usr/include/bits/wordsize.h \
+ /usr/include/bits/wordsize.h \
+ /usr/include/c++/4.8.5/x86_64-redhat-linux/bits/atomic_word.h \
+ /usr/include/c++/4.8.5/bits/locale_classes.h /usr/include/c++/4.8.5/string \
+ /usr/include/c++/4.8.5/bits/allocator.h \
+ /usr/include/c++/4.8.5/x86_64-redhat-linux/bits/c++allocator.h \
+ /usr/include/c++/4.8.5/ext/new_allocator.h /usr/include/c++/4.8.5/new \
+ /usr/include/c++/4.8.5/bits/ostream_insert.h \
+ /usr/include/c++/4.8.5/bits/cxxabi_forced.h \
+ /usr/include/c++/4.8.5/bits/stl_function.h \
+ /usr/include/c++/4.8.5/backward/binders.h \
+ /usr/include/c++/4.8.5/bits/range_access.h \
+ /usr/include/c++/4.8.5/bits/basic_string.h \
+ /usr/include/c++/4.8.5/bits/basic_string.tcc \
+ /usr/include/c++/4.8.5/bits/locale_classes.tcc /usr/include/c++/4.8.5/streambuf \
+ /usr/include/c++/4.8.5/bits/streambuf.tcc \
+ /usr/include/c++/4.8.5/bits/basic_ios.h \
+ /usr/include/c++/4.8.5/bits/locale_facets.h /usr/include/c++/4.8.5/cwctype \
+ /usr/include/wctype.h /usr/include/wchar.h /usr/include/c++/4.8.5/cctype \
+ /usr/include/c++/4.8.5/x86_64-redhat-linux/bits/ctype_base.h \
+ /usr/include/c++/4.8.5/bits/streambuf_iterator.h \
+ /usr/include/c++/4.8.5/x86_64-redhat-linux/bits/ctype_inline.h \
+ /usr/include/c++/4.8.5/bits/locale_facets.tcc \
+ /usr/include/c++/4.8.5/bits/basic_ios.tcc \
+ /usr/include/c++/4.8.5/bits/ostream.tcc /usr/include/c++/4.8.5/istream \
+ /usr/include/c++/4.8.5/bits/istream.tcc ../config.h /usr/include/sys/utsname.h \
+ /usr/include/bits/utsname.h /usr/include/unistd.h /usr/include/bits/posix_opt.h \
+ /usr/include/bits/environments.h /usr/include/bits/wordsize.h \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/stddef.h \
+ /usr/include/bits/confname.h /usr/include/getopt.h \
+ /usr/include/c++/4.8.5/cstdlib /usr/include/stdlib.h \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/stddef.h \
+ /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
+ /usr/include/sys/types.h \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/stddef.h \
+ /usr/include/sys/select.h /usr/include/bits/select.h \
+ /usr/include/bits/wordsize.h /usr/include/bits/sigset.h /usr/include/bits/time.h \
+ /usr/include/sys/sysmacros.h /usr/include/alloca.h \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/stddef.h \
+ /usr/include/bits/stdlib-float.h /usr/include/c++/4.8.5/fstream \
+ /usr/include/c++/4.8.5/bits/codecvt.h /usr/include/c++/4.8.5/cstdio \
+ /usr/include/stdio.h \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/stddef.h \
+ /usr/include/libio.h /usr/include/_G_config.h \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/stddef.h \
+ /usr/include/wchar.h /usr/include/bits/stdio_lim.h \
+ /usr/include/bits/sys_errlist.h /usr/include/bits/stdio.h \
+ /usr/include/c++/4.8.5/x86_64-redhat-linux/bits/basic_file.h \
+ /usr/include/c++/4.8.5/x86_64-redhat-linux/bits/c++io.h \
+ /usr/include/c++/4.8.5/cstdio /usr/include/c++/4.8.5/bits/fstream.tcc \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/omp.h \
+ isodate.h ../config.h release.h ../config.h qbox_xmlns.h ../config.h Context.h \
+ ../config.h \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/complex \
+ /usr/include/c++/4.8.5/complex /usr/include/c++/4.8.5/cmath \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/math.h \
+ /usr/include/math.h /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h \
+ /usr/include/bits/huge_vall.h /usr/include/bits/inf.h /usr/include/bits/nan.h \
+ /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h \
+ /usr/include/bits/mathcalls.h /usr/include/bits/mathcalls.h \
+ /usr/include/bits/mathinline.h /usr/include/c++/4.8.5/sstream \
+ /usr/include/c++/4.8.5/bits/sstream.tcc ../config.h \
+ /usr/include/c++/4.8.5/vector /usr/include/c++/4.8.5/bits/stl_construct.h \
+ /usr/include/c++/4.8.5/ext/alloc_traits.h \
+ /usr/include/c++/4.8.5/bits/stl_uninitialized.h \
+ /usr/include/c++/4.8.5/bits/stl_vector.h \
+ /usr/include/c++/4.8.5/bits/stl_bvector.h /usr/include/c++/4.8.5/bits/vector.tcc \
+ /usr/mpi/intel/mvapich2-2.3a/include/mpi.h \
+ /usr/mpi/intel/mvapich2-2.3a/include/mpio.h \
+ /usr/mpi/intel/mvapich2-2.3a/include/mpi.h \
+ /usr/mpi/intel/mvapich2-2.3a/include/mpicxx.h UserInterface.h ../config.h \
+ /usr/include/c++/4.8.5/cstring /usr/include/string.h \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/stddef.h \
+ /usr/include/c++/4.8.5/iomanip /usr/include/c++/4.8.5/list \
+ /usr/include/c++/4.8.5/bits/stl_list.h /usr/include/c++/4.8.5/bits/list.tcc \
+ /usr/include/c++/4.8.5/algorithm /usr/include/c++/4.8.5/utility \
+ /usr/include/c++/4.8.5/bits/stl_relops.h /usr/include/c++/4.8.5/bits/stl_algo.h \
+ /usr/include/c++/4.8.5/cstdlib /usr/include/c++/4.8.5/bits/algorithmfwd.h \
+ /usr/include/c++/4.8.5/bits/stl_heap.h /usr/include/c++/4.8.5/bits/stl_tempbuf.h \
+ Context.h ../config.h Sample.h ../config.h AtomSet.h ../config.h Context.h \
+ ../config.h Atom.h ../config.h D3vector.h ../config.h \
+ /usr/include/c++/4.8.5/cmath \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/math.h \
+ /usr/include/c++/4.8.5/cassert /usr/include/assert.h Species.h ../config.h \
+ /usr/include/c++/4.8.5/cmath \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/math.h \
+ Context.h ../config.h Basis.h ../config.h D3vector.h ../config.h UnitCell.h \
+ ../config.h D3vector.h ../config.h /usr/include/c++/4.8.5/valarray \
+ /usr/include/c++/4.8.5/cmath \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/math.h \
+ /usr/include/c++/4.8.5/bits/valarray_array.h /usr/include/c++/4.8.5/cstdlib \
+ /usr/include/c++/4.8.5/bits/valarray_array.tcc \
+ /usr/include/c++/4.8.5/bits/valarray_before.h \
+ /usr/include/c++/4.8.5/bits/slice_array.h \
+ /usr/include/c++/4.8.5/bits/valarray_after.h \
+ /usr/include/c++/4.8.5/bits/gslice.h /usr/include/c++/4.8.5/bits/gslice_array.h \
+ /usr/include/c++/4.8.5/bits/mask_array.h \
+ /usr/include/c++/4.8.5/bits/indirect_array.h Context.h ../config.h Spline.h \
+ ../config.h MMSpecies.h ../config.h /usr/include/c++/4.8.5/cmath \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/math.h \
+ Context.h ../config.h EmpiricalPotential.h ../config.h Context.h ../config.h \
+ D3vector.h ../config.h SymmetrySet.h ../config.h Context.h ../config.h \
+ Symmetry.h ../config.h D3vector.h ../config.h UnitCell.h ../config.h \
+ /usr/include/c++/4.8.5/map /usr/include/c++/4.8.5/bits/stl_tree.h \
+ /usr/include/c++/4.8.5/bits/stl_map.h /usr/include/c++/4.8.5/bits/stl_multimap.h \
+ Wavefunction.h ../config.h D3vector.h ../config.h UnitCell.h ../config.h \
+ AtomSet.h ../config.h SharedFilePtr.h ../config.h Timer.h ../config.h \
+ /usr/include/sys/time.h /usr/include/bits/time.h \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/stdint.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/stdint.h /usr/include/stdint.h \
+ /usr/include/bits/wordsize.h /usr/include/c++/4.8.5/cstdio Control.h ../config.h \
+ ConstraintSet.h ../config.h SymmetrySet.h ../config.h Timer.h ../config.h \
+ AtomCmd.h ../config.h /usr/include/c++/4.8.5/cstdlib UserInterface.h ../config.h \
+ Sample.h ../config.h MMAtomCmd.h ../config.h /usr/include/c++/4.8.5/cstdlib \
+ UserInterface.h ../config.h Sample.h ../config.h HelpCmd.h ../config.h \
+ UserInterface.h ../config.h Sample.h ../config.h ListAtomsCmd.h ../config.h \
+ UserInterface.h ../config.h Sample.h ../config.h /usr/include/c++/4.8.5/cstdlib \
+ ListSpeciesCmd.h ../config.h UserInterface.h ../config.h Sample.h ../config.h \
+ /usr/include/c++/4.8.5/cstdlib LoadCmd.h ../config.h \
+ /usr/include/c++/4.8.5/cstdlib UserInterface.h ../config.h Sample.h ../config.h \
+ PrintCmd.h ../config.h UserInterface.h ../config.h Sample.h ../config.h \
+ PromoteOccCmd.h ../config.h UserInterface.h ../config.h Sample.h ../config.h \
+ /usr/include/c++/4.8.5/cstdlib QuitCmd.h ../config.h UserInterface.h ../config.h \
+ Sample.h ../config.h RandomizeWfCmd.h ../config.h UserInterface.h ../config.h \
+ Sample.h ../config.h /usr/include/c++/4.8.5/cstdlib RandomizeRealWfCmd.h \
+ ../config.h UserInterface.h ../config.h Sample.h ../config.h \
+ /usr/include/c++/4.8.5/cstdlib RandomizeVelCmd.h ../config.h UserInterface.h \
+ ../config.h Sample.h ../config.h /usr/include/c++/4.8.5/cstdlib RunCmd.h \
+ ../config.h UserInterface.h ../config.h Sample.h ../config.h MDSaveCmd.h \
+ ../config.h /usr/include/c++/4.8.5/cstdlib UserInterface.h ../config.h Sample.h \
+ ../config.h SaveCmd.h ../config.h /usr/include/c++/4.8.5/cstdlib UserInterface.h \
+ ../config.h Sample.h ../config.h SavesysCmd.h ../config.h \
+ /usr/include/c++/4.8.5/cstdlib UserInterface.h ../config.h Sample.h ../config.h \
+ SavedenCmd.h ../config.h /usr/include/c++/4.8.5/cstdlib UserInterface.h \
+ ../config.h Sample.h ../config.h SaveESPCmd.h ../config.h UserInterface.h \
+ ../config.h Sample.h ../config.h SetCmd.h ../config.h \
+ /usr/include/c++/4.8.5/cstdlib UserInterface.h ../config.h Sample.h ../config.h \
+ ShiftWFCmd.h ../config.h UserInterface.h ../config.h Sample.h ../config.h \
+ /usr/include/c++/4.8.5/cstdlib WFPhaseRealCmd.h ../config.h UserInterface.h \
+ ../config.h Sample.h ../config.h /usr/include/c++/4.8.5/cstdlib SpeciesCmd.h \
+ ../config.h /usr/include/c++/4.8.5/cstdlib UserInterface.h ../config.h Sample.h \
+ ../config.h MMSpeciesCmd.h ../config.h /usr/include/c++/4.8.5/cstdlib \
+ UserInterface.h ../config.h Sample.h ../config.h EmpiricalPotentialCmd.h \
+ ../config.h /usr/include/c++/4.8.5/cstdlib UserInterface.h ../config.h Sample.h \
+ ../config.h EmpiricalPotential.h ../config.h StatusCmd.h ../config.h \
+ UserInterface.h ../config.h Sample.h ../config.h KpointCmd.h ../config.h \
+ /usr/include/c++/4.8.5/cstdlib UserInterface.h ../config.h Sample.h ../config.h \
+ SymmetryCmd.h ../config.h /usr/include/c++/4.8.5/cstdlib UserInterface.h \
+ ../config.h Sample.h ../config.h ParOptCmd.h ../config.h UserInterface.h \
+ ../config.h Sample.h ../config.h LockCmd.h ../config.h \
+ /usr/include/c++/4.8.5/cstdlib UserInterface.h ../config.h Sample.h ../config.h \
+ Species.h ../config.h MMSpecies.h ../config.h Atom.h ../config.h UnlockCmd.h \
+ ../config.h /usr/include/c++/4.8.5/cstdlib UserInterface.h ../config.h Sample.h \
+ ../config.h Species.h ../config.h MMSpecies.h ../config.h Atom.h ../config.h \
+ SetVelCmd.h ../config.h /usr/include/c++/4.8.5/cstdlib UserInterface.h \
+ ../config.h Sample.h ../config.h Species.h ../config.h MMSpecies.h ../config.h \
+ Atom.h ../config.h ComputeMLWFCmd.h ../config.h UserInterface.h ../config.h \
+ Sample.h ../config.h MLWFTransform.h ../config.h D3vector.h ../config.h \
+ BasisMapping.h ../config.h TDMLWFTransform.h D3vector.h ../config.h \
+ BasisMapping.h ../config.h UserInterface.h ../config.h Sample.h ../config.h \
+ Matrix.h ../config.h /usr/include/c++/4.8.5/cstring AngleCmd.h ../config.h \
+ UserInterface.h ../config.h Sample.h ../config.h /usr/include/c++/4.8.5/cstdlib \
+ ConstraintCmd.h ../config.h UserInterface.h ../config.h Sample.h ../config.h \
+ DistanceCmd.h ../config.h UserInterface.h ../config.h Sample.h ../config.h \
+ /usr/include/c++/4.8.5/cstdlib FoldInWsCmd.h ../config.h \
+ /usr/include/c++/4.8.5/cstdlib UserInterface.h ../config.h Sample.h ../config.h \
+ StrainCmd.h ../config.h /usr/include/c++/4.8.5/cstdlib UserInterface.h \
+ ../config.h Sample.h ../config.h TorsionCmd.h ../config.h UserInterface.h \
+ ../config.h Sample.h ../config.h /usr/include/c++/4.8.5/cstdlib ResetVcmCmd.h \
+ ../config.h /usr/include/c++/4.8.5/cstdlib UserInterface.h ../config.h Sample.h \
+ ../config.h ListConstraintsCmd.h ../config.h UserInterface.h ../config.h \
+ Sample.h ../config.h PlotCmd.h ../config.h /usr/include/c++/4.8.5/cstdlib \
+ UserInterface.h ../config.h Sample.h ../config.h AtomsDyn.h ../config.h Sample.h \
+ ../config.h Cell.h ../config.h Sample.h ../config.h CellDyn.h ../config.h \
+ Sample.h ../config.h Wavefunction.h ../config.h SlaterDet.h ../config.h \
+ Context.h ../config.h Basis.h ../config.h Matrix.h ../config.h D3vector.h \
+ ../config.h Timer.h ../config.h /usr/include/c++/4.8.5/cstdio CellLock.h \
+ ../config.h Sample.h ../config.h CellMass.h ../config.h Sample.h ../config.h \
+ ChargeMixing.h ../config.h Sample.h ../config.h ChargeMixCoeff.h ../config.h \
+ Sample.h ../config.h ChargeMixRcut.h ../config.h Sample.h ../config.h \
+ ChargeMixNdim.h ../config.h Sample.h ../config.h Debug.h ../config.h Sample.h \
+ ../config.h Ecut.h ../config.h Sample.h ../config.h Ecutprec.h ../config.h \
+ Sample.h ../config.h Ecutden.h ../config.h Sample.h ../config.h Ecuts.h \
+ ../config.h Sample.h ../config.h Emass.h ../config.h Sample.h ../config.h \
+ Efield.h D3vector.h ../config.h Sample.h ../config.h Polarization.h Sample.h \
+ ../config.h ExtStress.h ../config.h Sample.h ../config.h Smearing.h ../config.h \
+ Sample.h ../config.h SmearingWidth.h ../config.h Sample.h ../config.h \
+ FermiTemp.h ../config.h Sample.h ../config.h Force_Complex_WF.h ../config.h \
+ Sample.h ../config.h Non_Selfconsistent_Energy_Output.h ../config.h Sample.h \
+ ../config.h TDDt.h ../config.h Sample.h ../config.h NA_overlaps.h ../config.h \
+ Sample.h ../config.h Dt.h ../config.h Sample.h ../config.h Nempty.h ../config.h \
+ Sample.h ../config.h Nrowmax.h ../config.h Sample.h ../config.h ChargeDensity.h \
+ ../config.h Timer.h ../config.h Context.h ../config.h FourierTransform.h \
+ ../config.h ../config.h /usr/include/fftw3.h \
+ /nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/stddef.h \
+ Timer.h ../config.h Context.h ../config.h RefCell.h ../config.h Sample.h \
+ ../config.h Spin.h ../config.h Sample.h ../config.h Stress.h ../config.h \
+ Sample.h ../config.h Thermostat.h ../config.h Sample.h ../config.h \
+ ThresholdScf.h ../config.h Sample.h ../config.h ThresholdForce.h ../config.h \
+ Sample.h ../config.h ThresholdStress.h ../config.h Sample.h ../config.h ThTemp.h \
+ ../config.h Sample.h ../config.h ThTime.h ../config.h Sample.h ../config.h \
+ ThWidth.h ../config.h Sample.h ../config.h CenterOfMass.h ../config.h \
+ /usr/include/c++/4.8.5/cstdlib Sample.h ../config.h WfDiag.h ../config.h \
+ Sample.h ../config.h WfDyn.h ../config.h Sample.h ../config.h Wavefunction.h \
+ ../config.h SlaterDet.h ../config.h WfExtrap.h ../config.h Sample.h ../config.h \
+ Wavefunction.h ../config.h SlaterDet.h ../config.h WFPhaseRealVar.h ../config.h \
+ Sample.h ../config.h Xc.h ../config.h Sample.h ../config.h Nparallelkpts.h \
+ ../config.h Sample.h ../config.h Nkpoints.h ../config.h Sample.h ../config.h \
+ IPrint.h ../config.h Sample.h ../config.h CellStepFreq.h ../config.h Sample.h \
+ ../config.h EnthalpyPressure.h ../config.h Sample.h ../config.h \
+ EnthalpyThreshold.h ../config.h Sample.h ../config.h HugoniostatVar.h \
+ ../config.h Sample.h ../config.h HugDeltaTemp.h ../config.h Sample.h ../config.h \
+ HugFreq.h ../config.h Sample.h ../config.h RunTimer.h ../config.h Sample.h \
+ ../config.h HubbardU.h ../config.h Sample.h ../config.h Memory.h ../config.h \
+ Sample.h ../config.h MDIter.h ../config.h Sample.h ../config.h profile.h \
+ ../config.h MatrixLoc.h ../config.h Sample.h ../config.h Pblock.h ../config.h \
+ Sample.h ../config.h SaveFreq.h ../config.h Sample.h ../config.h SaveDenFreq.h \
+ ../config.h Sample.h ../config.h SaveWfFreq.h ../config.h Sample.h ../config.h \
+ SaveProjFreq.h Sample.h ../config.h NetCharge.h ../config.h Sample.h ../config.h \
+ EsmBC.h ../config.h Sample.h ../config.h EsmW.h ../config.h Sample.h ../config.h \
+ FcpThermostat.h ../config.h Sample.h ../config.h FcpThTemp.h ../config.h \
+ Sample.h ../config.h FcpThTime.h ../config.h Sample.h ../config.h FcpThWidth.h \
+ ../config.h Sample.h ../config.h FcpPmass.h ../config.h Sample.h ../config.h \
+ FcpMu.h ../config.h Sample.h ../config.h
+
+/usr/include/c++/4.8.5/iostream:
+
+/usr/include/c++/4.8.5/x86_64-redhat-linux/bits/c++config.h:
+
+/usr/include/bits/wordsize.h:
+
+/usr/include/c++/4.8.5/x86_64-redhat-linux/bits/os_defines.h:
+
+/usr/include/features.h:
+
+/usr/include/stdc-predef.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/gnu/stubs.h:
+
+/usr/include/gnu/stubs-64.h:
+
+/usr/include/c++/4.8.5/x86_64-redhat-linux/bits/cpu_defines.h:
+
+/usr/include/c++/4.8.5/ostream:
+
+/usr/include/c++/4.8.5/ios:
+
+/usr/include/c++/4.8.5/iosfwd:
+
+/usr/include/c++/4.8.5/bits/stringfwd.h:
+
+/usr/include/c++/4.8.5/bits/memoryfwd.h:
+
+/usr/include/c++/4.8.5/bits/postypes.h:
+
+/usr/include/c++/4.8.5/cwchar:
+
+/usr/include/wchar.h:
+
+/usr/include/stdio.h:
+
+/nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/stdarg.h:
+
+/usr/include/bits/wchar.h:
+
+/nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/stddef.h:
+
+/usr/include/xlocale.h:
+
+/usr/include/c++/4.8.5/exception:
+
+/usr/include/c++/4.8.5/bits/atomic_lockfree_defines.h:
+
+/usr/include/c++/4.8.5/bits/char_traits.h:
+
+/usr/include/c++/4.8.5/bits/stl_algobase.h:
+
+/usr/include/c++/4.8.5/bits/functexcept.h:
+
+/usr/include/c++/4.8.5/bits/exception_defines.h:
+
+/usr/include/c++/4.8.5/bits/cpp_type_traits.h:
+
+/usr/include/c++/4.8.5/ext/type_traits.h:
+
+/usr/include/c++/4.8.5/ext/numeric_traits.h:
+
+/usr/include/c++/4.8.5/bits/stl_pair.h:
+
+/usr/include/c++/4.8.5/bits/move.h:
+
+/usr/include/c++/4.8.5/bits/concept_check.h:
+
+/usr/include/c++/4.8.5/bits/stl_iterator_base_types.h:
+
+/usr/include/c++/4.8.5/bits/stl_iterator_base_funcs.h:
+
+/usr/include/c++/4.8.5/debug/debug.h:
+
+/usr/include/c++/4.8.5/bits/stl_iterator.h:
+
+/usr/include/c++/4.8.5/bits/localefwd.h:
+
+/usr/include/c++/4.8.5/x86_64-redhat-linux/bits/c++locale.h:
+
+/usr/include/c++/4.8.5/clocale:
+
+/usr/include/locale.h:
+
+/usr/include/bits/locale.h:
+
+/usr/include/c++/4.8.5/cctype:
+
+/usr/include/ctype.h:
+
+/usr/include/bits/types.h:
+
+/usr/include/bits/typesizes.h:
+
+/usr/include/endian.h:
+
+/usr/include/bits/endian.h:
+
+/usr/include/bits/byteswap.h:
+
+/usr/include/bits/byteswap-16.h:
+
+/usr/include/c++/4.8.5/bits/ios_base.h:
+
+/usr/include/c++/4.8.5/ext/atomicity.h:
+
+/usr/include/c++/4.8.5/x86_64-redhat-linux/bits/gthr.h:
+
+/usr/include/c++/4.8.5/x86_64-redhat-linux/bits/gthr-default.h:
+
+/usr/include/pthread.h:
+
+/usr/include/sched.h:
+
+/usr/include/time.h:
+
+/usr/include/bits/sched.h:
+
+/usr/include/bits/time.h:
+
+/usr/include/bits/timex.h:
+
+/usr/include/bits/pthreadtypes.h:
+
+/usr/include/bits/setjmp.h:
+
+/usr/include/c++/4.8.5/x86_64-redhat-linux/bits/atomic_word.h:
+
+/usr/include/c++/4.8.5/bits/locale_classes.h:
+
+/usr/include/c++/4.8.5/string:
+
+/usr/include/c++/4.8.5/bits/allocator.h:
+
+/usr/include/c++/4.8.5/x86_64-redhat-linux/bits/c++allocator.h:
+
+/usr/include/c++/4.8.5/ext/new_allocator.h:
+
+/usr/include/c++/4.8.5/new:
+
+/usr/include/c++/4.8.5/bits/ostream_insert.h:
+
+/usr/include/c++/4.8.5/bits/cxxabi_forced.h:
+
+/usr/include/c++/4.8.5/bits/stl_function.h:
+
+/usr/include/c++/4.8.5/backward/binders.h:
+
+/usr/include/c++/4.8.5/bits/range_access.h:
+
+/usr/include/c++/4.8.5/bits/basic_string.h:
+
+/usr/include/c++/4.8.5/bits/basic_string.tcc:
+
+/usr/include/c++/4.8.5/bits/locale_classes.tcc:
+
+/usr/include/c++/4.8.5/streambuf:
+
+/usr/include/c++/4.8.5/bits/streambuf.tcc:
+
+/usr/include/c++/4.8.5/bits/basic_ios.h:
+
+/usr/include/c++/4.8.5/bits/locale_facets.h:
+
+/usr/include/c++/4.8.5/cwctype:
+
+/usr/include/wctype.h:
+
+/usr/include/c++/4.8.5/x86_64-redhat-linux/bits/ctype_base.h:
+
+/usr/include/c++/4.8.5/bits/streambuf_iterator.h:
+
+/usr/include/c++/4.8.5/x86_64-redhat-linux/bits/ctype_inline.h:
+
+/usr/include/c++/4.8.5/bits/locale_facets.tcc:
+
+/usr/include/c++/4.8.5/bits/basic_ios.tcc:
+
+/usr/include/c++/4.8.5/bits/ostream.tcc:
+
+/usr/include/c++/4.8.5/istream:
+
+/usr/include/c++/4.8.5/bits/istream.tcc:
+
+../config.h:
+
+/usr/include/sys/utsname.h:
+
+/usr/include/bits/utsname.h:
+
+/usr/include/unistd.h:
+
+/usr/include/bits/posix_opt.h:
+
+/usr/include/bits/environments.h:
+
+/usr/include/bits/confname.h:
+
+/usr/include/getopt.h:
+
+/usr/include/c++/4.8.5/cstdlib:
+
+/usr/include/stdlib.h:
+
+/usr/include/bits/waitflags.h:
+
+/usr/include/bits/waitstatus.h:
+
+/usr/include/sys/types.h:
+
+/usr/include/sys/select.h:
+
+/usr/include/bits/select.h:
+
+/usr/include/bits/sigset.h:
+
+/usr/include/sys/sysmacros.h:
+
+/usr/include/alloca.h:
+
+/usr/include/bits/stdlib-float.h:
+
+/usr/include/c++/4.8.5/fstream:
+
+/usr/include/c++/4.8.5/bits/codecvt.h:
+
+/usr/include/c++/4.8.5/cstdio:
+
+/usr/include/libio.h:
+
+/usr/include/_G_config.h:
+
+/usr/include/bits/stdio_lim.h:
+
+/usr/include/bits/sys_errlist.h:
+
+/usr/include/bits/stdio.h:
+
+/usr/include/c++/4.8.5/x86_64-redhat-linux/bits/basic_file.h:
+
+/usr/include/c++/4.8.5/x86_64-redhat-linux/bits/c++io.h:
+
+/usr/include/c++/4.8.5/bits/fstream.tcc:
+
+/nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/omp.h:
+
+isodate.h:
+
+release.h:
+
+qbox_xmlns.h:
+
+Context.h:
+
+/nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/complex:
+
+/usr/include/c++/4.8.5/complex:
+
+/usr/include/c++/4.8.5/cmath:
+
+/nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/math.h:
+
+/usr/include/math.h:
+
+/usr/include/bits/huge_val.h:
+
+/usr/include/bits/huge_valf.h:
+
+/usr/include/bits/huge_vall.h:
+
+/usr/include/bits/inf.h:
+
+/usr/include/bits/nan.h:
+
+/usr/include/bits/mathdef.h:
+
+/usr/include/bits/mathcalls.h:
+
+/usr/include/bits/mathinline.h:
+
+/usr/include/c++/4.8.5/sstream:
+
+/usr/include/c++/4.8.5/bits/sstream.tcc:
+
+/usr/include/c++/4.8.5/vector:
+
+/usr/include/c++/4.8.5/bits/stl_construct.h:
+
+/usr/include/c++/4.8.5/ext/alloc_traits.h:
+
+/usr/include/c++/4.8.5/bits/stl_uninitialized.h:
+
+/usr/include/c++/4.8.5/bits/stl_vector.h:
+
+/usr/include/c++/4.8.5/bits/stl_bvector.h:
+
+/usr/include/c++/4.8.5/bits/vector.tcc:
+
+/usr/mpi/intel/mvapich2-2.3a/include/mpi.h:
+
+/usr/mpi/intel/mvapich2-2.3a/include/mpio.h:
+
+/usr/mpi/intel/mvapich2-2.3a/include/mpicxx.h:
+
+UserInterface.h:
+
+/usr/include/c++/4.8.5/cstring:
+
+/usr/include/string.h:
+
+/usr/include/c++/4.8.5/iomanip:
+
+/usr/include/c++/4.8.5/list:
+
+/usr/include/c++/4.8.5/bits/stl_list.h:
+
+/usr/include/c++/4.8.5/bits/list.tcc:
+
+/usr/include/c++/4.8.5/algorithm:
+
+/usr/include/c++/4.8.5/utility:
+
+/usr/include/c++/4.8.5/bits/stl_relops.h:
+
+/usr/include/c++/4.8.5/bits/stl_algo.h:
+
+/usr/include/c++/4.8.5/bits/algorithmfwd.h:
+
+/usr/include/c++/4.8.5/bits/stl_heap.h:
+
+/usr/include/c++/4.8.5/bits/stl_tempbuf.h:
+
+Sample.h:
+
+AtomSet.h:
+
+Atom.h:
+
+D3vector.h:
+
+/usr/include/c++/4.8.5/cassert:
+
+/usr/include/assert.h:
+
+Species.h:
+
+Basis.h:
+
+UnitCell.h:
+
+/usr/include/c++/4.8.5/valarray:
+
+/usr/include/c++/4.8.5/bits/valarray_array.h:
+
+/usr/include/c++/4.8.5/bits/valarray_array.tcc:
+
+/usr/include/c++/4.8.5/bits/valarray_before.h:
+
+/usr/include/c++/4.8.5/bits/slice_array.h:
+
+/usr/include/c++/4.8.5/bits/valarray_after.h:
+
+/usr/include/c++/4.8.5/bits/gslice.h:
+
+/usr/include/c++/4.8.5/bits/gslice_array.h:
+
+/usr/include/c++/4.8.5/bits/mask_array.h:
+
+/usr/include/c++/4.8.5/bits/indirect_array.h:
+
+Spline.h:
+
+MMSpecies.h:
+
+EmpiricalPotential.h:
+
+SymmetrySet.h:
+
+Symmetry.h:
+
+/usr/include/c++/4.8.5/map:
+
+/usr/include/c++/4.8.5/bits/stl_tree.h:
+
+/usr/include/c++/4.8.5/bits/stl_map.h:
+
+/usr/include/c++/4.8.5/bits/stl_multimap.h:
+
+Wavefunction.h:
+
+SharedFilePtr.h:
+
+Timer.h:
+
+/usr/include/sys/time.h:
+
+/nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/compiler/include/stdint.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/stdint.h:
+
+/usr/include/stdint.h:
+
+Control.h:
+
+ConstraintSet.h:
+
+AtomCmd.h:
+
+MMAtomCmd.h:
+
+HelpCmd.h:
+
+ListAtomsCmd.h:
+
+ListSpeciesCmd.h:
+
+LoadCmd.h:
+
+PrintCmd.h:
+
+PromoteOccCmd.h:
+
+QuitCmd.h:
+
+RandomizeWfCmd.h:
+
+RandomizeRealWfCmd.h:
+
+RandomizeVelCmd.h:
+
+RunCmd.h:
+
+MDSaveCmd.h:
+
+SaveCmd.h:
+
+SavesysCmd.h:
+
+SavedenCmd.h:
+
+SaveESPCmd.h:
+
+SetCmd.h:
+
+ShiftWFCmd.h:
+
+WFPhaseRealCmd.h:
+
+SpeciesCmd.h:
+
+MMSpeciesCmd.h:
+
+EmpiricalPotentialCmd.h:
+
+StatusCmd.h:
+
+KpointCmd.h:
+
+SymmetryCmd.h:
+
+ParOptCmd.h:
+
+LockCmd.h:
+
+UnlockCmd.h:
+
+SetVelCmd.h:
+
+ComputeMLWFCmd.h:
+
+MLWFTransform.h:
+
+BasisMapping.h:
+
+TDMLWFTransform.h:
+
+Matrix.h:
+
+AngleCmd.h:
+
+ConstraintCmd.h:
+
+DistanceCmd.h:
+
+FoldInWsCmd.h:
+
+StrainCmd.h:
+
+TorsionCmd.h:
+
+ResetVcmCmd.h:
+
+ListConstraintsCmd.h:
+
+PlotCmd.h:
+
+AtomsDyn.h:
+
+Cell.h:
+
+CellDyn.h:
+
+SlaterDet.h:
+
+CellLock.h:
+
+CellMass.h:
+
+ChargeMixing.h:
+
+ChargeMixCoeff.h:
+
+ChargeMixRcut.h:
+
+ChargeMixNdim.h:
+
+Debug.h:
+
+Ecut.h:
+
+Ecutprec.h:
+
+Ecutden.h:
+
+Ecuts.h:
+
+Emass.h:
+
+Efield.h:
+
+Polarization.h:
+
+ExtStress.h:
+
+Smearing.h:
+
+SmearingWidth.h:
+
+FermiTemp.h:
+
+Force_Complex_WF.h:
+
+Non_Selfconsistent_Energy_Output.h:
+
+TDDt.h:
+
+NA_overlaps.h:
+
+Dt.h:
+
+Nempty.h:
+
+Nrowmax.h:
+
+ChargeDensity.h:
+
+FourierTransform.h:
+
+/usr/include/fftw3.h:
+
+RefCell.h:
+
+Spin.h:
+
+Stress.h:
+
+Thermostat.h:
+
+ThresholdScf.h:
+
+ThresholdForce.h:
+
+ThresholdStress.h:
+
+ThTemp.h:
+
+ThTime.h:
+
+ThWidth.h:
+
+CenterOfMass.h:
+
+WfDiag.h:
+
+WfDyn.h:
+
+WfExtrap.h:
+
+WFPhaseRealVar.h:
+
+Xc.h:
+
+Nparallelkpts.h:
+
+Nkpoints.h:
+
+IPrint.h:
+
+CellStepFreq.h:
+
+EnthalpyPressure.h:
+
+EnthalpyThreshold.h:
+
+HugoniostatVar.h:
+
+HugDeltaTemp.h:
+
+HugFreq.h:
+
+RunTimer.h:
+
+HubbardU.h:
+
+Memory.h:
+
+MDIter.h:
+
+profile.h:
+
+MatrixLoc.h:
+
+Pblock.h:
+
+SaveFreq.h:
+
+SaveDenFreq.h:
+
+SaveWfFreq.h:
+
+SaveProjFreq.h:
+
+NetCharge.h:
+
+EsmBC.h:
+
+EsmW.h:
+
+FcpThermostat.h:
+
+FcpThTemp.h:
+
+FcpThTime.h:
+
+FcpThWidth.h:
+
+FcpPmass.h:
+
+FcpMu.h:
