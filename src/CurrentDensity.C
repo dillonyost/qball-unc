@@ -31,7 +31,7 @@
 #include <iomanip>
 #include "Base64Transcoder.h"
 
-CurrentDensity::CurrentDensity(const Sample& s, const Wavefunction & wf):
+CurrentDensity::CurrentDensity( Sample& s, const Wavefunction & wf):
   ChargeDensity(s), wf_(wf){
   
 }
@@ -105,7 +105,7 @@ void CurrentDensity::update_current(EnergyFunctional & energy_functional, const 
 
 }
 
-void CurrentDensity::plot(const Sample * s, const std::string & filename){
+void CurrentDensity::plot( Sample * s, const std::string & filename){
   using namespace std;
 
   std::vector<std::vector<double> > global_current(3);
@@ -201,7 +201,7 @@ void CurrentDensity::plot(const Sample * s, const std::string & filename){
     }
 }
 
-void CurrentDensity::plot_vtk(const Sample * s, const std::string & filename){
+void CurrentDensity::plot_vtk( Sample * s, const std::string & filename){
   using namespace std;
   Base64Transcoder xcdr;
   

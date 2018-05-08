@@ -63,14 +63,14 @@ class EnergyFunctional
 
    friend class SelfConsistentPotential;
    
-  const Sample& s_;
+  Sample& s_;
   const Wavefunction& wf_;
   ChargeDensity& cd_;
   Basis* vbasis_;
   FourierTransform *vft;
   vector<vector<FourierTransform*> > ft;
   StructureFactor sf;
-  XCPotential* xcp;
+  XCPotential* xcp_;
   EnthalpyFunctional* epvf;
   ElectricEnthalpy* el_enth_; //DCY
   vector<vector<NonLocalPotential*> > nlp;
@@ -97,6 +97,8 @@ class EnergyFunctional
     sigma_enl, sigma_esr, sigma;
 
   public:
+
+  const XCPotential* xcp() { return xcp_; } 
 
   vector<vector<double> > v_r;
   vector<vector<double> > vxc_tau; // YY metagga
@@ -131,6 +133,8 @@ class EnergyFunctional
   double etotal_harris(void) const { return (ekin_ + econf_ + enl_ + ets_ + epv_ + ehub_ + eharris_ + esr_ - eself_); };  
   double casino_ewald(void);
   double casino_vloc(void);
+
+
   const ConfinementPotential *confpot(int ispin, int ikp) const { return cfp[ispin][ikp]; }
  
   ElectricEnthalpy* el_enth() { return el_enth_; } //DCY
@@ -167,7 +171,7 @@ class EnergyFunctional
      esr_ = potential.esr_;
   }
   
-  EnergyFunctional(const Sample& s, const Wavefunction& wf, ChargeDensity& cd);
+  EnergyFunctional(Sample& s, const Wavefunction& wf, ChargeDensity& cd);
   ~EnergyFunctional();
 };
 ostream& operator << ( ostream& os, const EnergyFunctional& e );

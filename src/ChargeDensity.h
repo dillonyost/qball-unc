@@ -70,12 +70,13 @@ class ChargeDensity {
   bool highmem_;
   bool nlcc_;
   bool tddft_involved_;
+  bool* mgga_; // YY
   vector<vector<complex<double> > > qnmg_;
   vector<vector<complex<double> > > sfactloc_;
   vector<double> rhornlcc_; 
 
-  void initialize(const Sample& s);
-  void initializeSymmetries(const Sample& s);
+  void initialize( Sample& s);
+  void initializeSymmetries( Sample& s);
   
   public:
   
@@ -116,8 +117,8 @@ class ChargeDensity {
   void print_memory(ostream&os, double& totsum, double& locsum) const;
   void print_timing();
   
-  ChargeDensity(const Sample& s);
-  ChargeDensity(const Sample& s, Wavefunction& cdwf);
+  ChargeDensity( Sample& s);
+  ChargeDensity( Sample& s, Wavefunction& cdwf);
   ~ChargeDensity();
 };
 #endif
