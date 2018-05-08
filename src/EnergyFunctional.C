@@ -50,7 +50,7 @@
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
-EnergyFunctional::EnergyFunctional(const Sample& s, const Wavefunction& wf, ChargeDensity& cd)
+EnergyFunctional::EnergyFunctional( Sample& s, const Wavefunction& wf, ChargeDensity& cd)
     : s_(s), wf_(wf), cd_(cd) {
   const AtomSet& atoms = s_.atoms;
   
@@ -130,11 +130,17 @@ EnergyFunctional::EnergyFunctional(const Sample& s, const Wavefunction& wf, Char
      update_hamiltonian();
 
      // AS: the charge density based on hamil_wf has to be used
-     xcp = new XCPotential((*hamil_cd_),s_.ctrl.xc,cd_);
+     xcp_ = new XCPotential((*hamil_cd_),s_.ctrl.xc,cd_);
   }
   else
   {
-     xcp = new XCPotential(cd_,s_.ctrl.xc);
+     xcp_ = new XCPotential(cd_,s_.ctrl.xc);
+  }
+  // check mgga
+  s_.ctrl.mgga = (xcp_->xcf()->ismGGA());
+  if ( s_.ctxt_.mype()==0 ) {
+    //cout << s_.ctrl.mgga << endl;
+    cout << "YY: Is the functional mGGA: " << (s_.ctrl.mgga ? "yes" : "no" )<< endl;
   }
 
   nlp.resize(wf_.nspin());
@@ -258,7 +264,7 @@ EnergyFunctional::EnergyFunctional(const Sample& s, const Wavefunction& wf, Char
 
 ////////////////////////////////////////////////////////////////////////////////
 EnergyFunctional::~EnergyFunctional(void) {
-  delete xcp;
+  delete xcp_;
   delete el_enth_; //DCY
   for ( int ispin = 0; ispin < wf_.nspin(); ispin++ )
     if (wf_.spinactive(ispin)) {
@@ -369,8 +375,8 @@ void EnergyFunctional::update_vhxc(void) {
   
   //fill(v_r[ispin].begin(),v_r[ispin].end(),0.0);
 
-  xcp->update(v_r, vxc_tau);
-  exc_ = xcp->exc();
+  xcp_->update(v_r, vxc_tau);
+  exc_ = xcp_->exc();
   tmap["exc"].stop();
 
 
@@ -967,8 +973,8 @@ void EnergyFunctional::update_harris(void) {
    }
   
    // update XC energy and potential
-  xcp->update(v_r, vxc_tau);
-  eharris_ = xcp->exc();
+  xcp_->update(v_r, vxc_tau);
+  eharris_ = xcp_->exc();
 
   // compute local potential energy: 
   // integral of el. charge times ionic local pot.
@@ -1042,8 +1048,8 @@ void EnergyFunctional::update_exc_ehart_eps(void)
 
   // update XC energy and potential
   tmap["exc"].start();
-  xcp->update_exc(v_r);
-  exc_ = xcp->exc();
+  xcp_->update_exc(v_r);
+  exc_ = xcp_->exc();
   tmap["exc"].stop();
 
   // compute local potential energy:
@@ -1399,7 +1405,7 @@ double EnergyFunctional::energy(Wavefunction& psi, bool compute_hpsi, Wavefuncti
   
   // Stress from exchange-correlation
   if ( compute_stress ) {
-    xcp->compute_stress(sigma_exc);
+    xcp_->compute_stress(sigma_exc);
   }
   
   // zero ionic forces
@@ -1656,8 +1662,8 @@ double EnergyFunctional::energy(Wavefunction& psi, bool compute_hpsi, Wavefuncti
               }
             }
             sd.rs_mul_add(*ft[ispin][ikp], &v_r[ispin][0], sdp);
-
-            sd.kinetic_hpsi(*ft[ispin][ikp], &vxc_tau[ispin][0], sdp); // YY: metagga gKS term
+            if (s_.ctrl.mgga)
+              sd.kinetic_hpsi(*ft[ispin][ikp], &vxc_tau[ispin][0], sdp); // YY: metagga gKS term
           }
         }
       }

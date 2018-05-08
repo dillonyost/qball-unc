@@ -48,7 +48,7 @@ extern "C" void cdLoop2(const int size, double* v1, double* v2, double* vout);
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
-ChargeDensity::ChargeDensity(const Sample& s) : wf_((Wavefunction&)s.wf),
+ChargeDensity::ChargeDensity( Sample& s) : wf_((Wavefunction&)s.wf),
                                                 atoms_((AtomSet&)s.atoms),
                                                 ctxt_(s.wf.context())
 {
@@ -56,18 +56,20 @@ ChargeDensity::ChargeDensity(const Sample& s) : wf_((Wavefunction&)s.wf),
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-ChargeDensity::ChargeDensity(const Sample& s, Wavefunction& cdwf) : wf_(cdwf),
+ChargeDensity::ChargeDensity( Sample& s, Wavefunction& cdwf) : wf_(cdwf),
                                                                     atoms_((AtomSet&)s.atoms),
                                                                     ctxt_(cdwf.context())
 {
    initialize(s);
 }
 ////////////////////////////////////////////////////////////////////////////////
-void ChargeDensity::initialize(const Sample& s)
+void ChargeDensity::initialize( Sample& s)
 {
    ultrasoft_ = s.ctrl.ultrasoft;
    nlcc_ = s.ctrl.nlcc;
    tddft_involved_ = s.ctrl.tddft_involved;
+
+   mgga_ = &s.ctrl.mgga; // YY
    
    highmem_ = false;
    if (s.ctrl.extra_memory >= 9)
@@ -160,7 +162,7 @@ void ChargeDensity::initialize(const Sample& s)
   }
 }
 ////////////////////////////////////////////////////////////////////////////////
-void ChargeDensity::initializeSymmetries(const Sample& s)
+void ChargeDensity::initializeSymmetries(  Sample& s)
 {
    int np012loc = vft_->np012loc();
    symindexloc.resize(np012loc);
@@ -563,8 +565,8 @@ void ChargeDensity::update_density() {
   }
   if (nlcc_)
      add_nlccden();
-
-  this->update_kinetic_energy_density();
+  if (*mgga_)
+     this->update_kinetic_energy_density();
 }
 ////////////////////////////////////////////////////////////////////////////////
 void ChargeDensity::update_rhor(void) {
@@ -589,7 +591,8 @@ void ChargeDensity::update_rhor(void) {
   }
   if (nlcc_)
      add_nlccden();
-  this->update_taur();
+  if (*mgga_)
+     this->update_taur();
 }
 ////////////////////////////////////////////////////////////////////////////////
 void ChargeDensity::reshape_rhor(const Context& oldvctxt, const Context& newvctxt) {

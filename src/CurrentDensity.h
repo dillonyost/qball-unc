@@ -37,14 +37,14 @@ class CurrentDensity : private ChargeDensity
   std::vector<std::vector<std::vector<double> > > current;
   std::vector<double> total_current;
  
-  CurrentDensity (const Sample& s, const Wavefunction & wf);
+  CurrentDensity ( Sample& s, const Wavefunction & wf);
   ~CurrentDensity (){
   }
 
   void update_current(EnergyFunctional & energy, const Wavefunction & dwf);
 
-  void plot(const Sample *, const std::string &);
-  void plot_vtk(const Sample *, const std::string &);
+  void plot( Sample *, const std::string &);
+  void plot_vtk( Sample *, const std::string &);
 
 };
 
