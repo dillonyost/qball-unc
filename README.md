@@ -2,23 +2,36 @@
 
 ## Installing on dogwood
    ```
-   autoreconf -i
-   QBALLPREFIX=/nas/longleaf/home/yiy/softwares-dogwood/qball/qball_test/qball_install
-   QBALLDEPS=
-   XERCESCDIR=/nas/longleaf/home/yiy/softwares-dogwood/qbox/xerces-c-src_2_8_0
-   MKLROOT=/nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/mkl/
-   export CC=mpicc
-   export CXX=mpic++
-   export FC=mpif90
-   export LIBS_BLAS="-L$MKLROOT -lmkl_intel_lp64 -lmkl_lapack95_lp64 -lmkl_sequential -lmkl_core -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64"
-   export LDFLAGS=""
-   export CFLAGS="-O3 "
-   export CXXFLAGS="$CFLAGS"
-   export FCFLAGS=$CFLAGS"  -I$HOME/$xarch/fftw-3.3.4/include"
-   ./configure  --with-xerces-prefix=$XERCESCDIR \
-    --with-fftw3-prefix=/nas/longleaf/home/yiy/softwares-dogwood/qbox/fftw-3.3.6-pl2/install-yiy \
-    --prefix=$QBALLPREFIX \
-    --with-libxc-prefix=/nas/longleaf/home/yiy/softwares-dogwood/cp2k/libxc_svn/libxc/install-yiy-intel \
+autoreconf -i
+
+LIBHOME=/nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/mkl/lib/intel64
+MKLDIR=/nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/mkl
+MPIDIR=/usr/mpi/intel/mvapich2-2.3a/
+BLASDIR=$LIBHOME
+LAPACKDIR=$LIBHOME
+SCALAPACK_DIR=$LIBHOME
+SCALAPACKLIB=$SCALAPACK_DIR/libmkl_scalapack_lp64.a
+LAPACKLIB=$LAPACKDIR/libmkl_lapack95_lp64.a
+
+export CXX=mpicc
+export CC=mpicxx
+export LIBS_BLAS="-L$LIBHOME/libmkl_blas95_lp64.a "
+export MKLROOT="/nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/mkl/"
+
+DFLAGS="-DUSE_MPI -DPRINTALL -DUSE_CSTDIO_LFS -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DUSE_XERCES -DXERCESC_3"
+
+INCLUDE=" -I$MKLDIR/include -I$MPIDIR/include"
+
+LIBPATH=" -L$LAPACKDIR -L$BLASDIR -L$MKLDIR/lib/intel64 -L$MPIDIR/lib64 "
+
+export PLIBS=" -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64"
+export LIBS="-lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lirc -lifcore -lsvml -lpthread $PLIBS $LAPACKLIB -lxerces-c" #-lxlf90_r -lxlfmath -lxlsmp"
+export LDFLAGS="$LIBPATH $LIBS -lc -lnss_files -lnss_dns -lresolv" #-qstaticlink -qarch=qp
+
+export CFLAGS="-qhot=novector -qsimd=auto -g -O3 -DUSE_MPI -DSCALAPACK $INCLUDE $DFLAGS"
+export  CXXFLAGS=" -g -O3 -DUSE_MPI -DSCALAPACK $INCLUDE $DFLAGS"
+
+./configure  --with-xerces-prefix=/nas/longleaf/home/dyost/software/qbox/xerces-c-src_2_8_0 --with-lapack=/nas/longleaf/apps/intel/17.2/intel/compilers_and_libraries_2017.2.174/linux/mkl/lib/intel64/libmkl_lapack95_lp64.a  --with-libxc-prefix=/nas/longleaf/home/yiy/softwares-dogwood/cp2k/libxc_svn/libxc/install-yiy-intel
    ```
 
 ## Installing
