@@ -352,7 +352,7 @@ int jade_complex(int maxsweep, double tol, vector<ComplexMatrix*> a,
             const complex<double> aii(apq[iapq+1]);
             const complex<double> ajj(apq[iapq+2]);
 	    const complex<double> v1(conj(c)*c - conj(s)*s);
-	    const double apqnew = real(v1 * (aii - ajj) + 2.0*(c * s * apq[iapq]) + 2.0*conj(s) * c * apq[iapq]));
+	    const double apqnew = real(v1 * (aii - ajj) + 2.0*(c * s * apq[iapq]) + 2.0*conj(s) * c * apq[iapq]);
 	    // accumulate change in sum of squares of diag elements
             // note negative sign: decrease in offdiag is increase in diag
             diag_change += abs(apqnew - real(aii - ajj));
