@@ -687,11 +687,49 @@ void EhrenSampleStepper::step(int niter)
           ComplexMatrix ortho(wf.sd(ispin,ikp)->context(),(wf.sd(ispin,ikp)->c()).n(),(wf.sd(ispin,ikp)->c()).n(),(wf.sd(ispin,ikp)->c()).nb(),(wf.sd(ispin,ikp)->c()).nb());
 
 	  tmap["gemm"].start();
-          //ortho.gemm('c','n',1.0,(wf).sd(ispin,ikp)->c(),(*wfdeque[5]).sd(ispin,ikp)->c(),0.0);
           ortho.gemm('c','n',1.0,(*s_.proj_wf).sd(ispin,ikp)->c(),(wf).sd(ispin,ikp)->c(),0.0);
 	  tmap["gemm"].stop();
 
+          DoubleMatrix ortho_proxy(ortho);
 
+          std::vector<double> occ_result, occ_current, occ_result2;
+          occ_result.resize((wf.sd(ispin,ikp)->c()).n());
+          occ_result2.resize((wf.sd(ispin,ikp)->c()).n());
+          occ_current.resize((wf.sd(ispin,ikp)->c()).n());
+          occ_result.clear();
+          occ_current.clear();
+
+          double ehp_count=0.0;
+          double ehp_count2=0.0;
+
+          if ( onpe0 )
+          {
+             cout << "<projections> " << endl;
+             for (int i=0; i<(wf.sd(ispin,ikp)->c()).n(); i++) {
+               occ_current[i]=(wf.sd(ispin,ikp))->occ(i);
+             }
+          }
+
+          tmap["sum_col"].start();
+          ortho.sum_columns_square_occ(occ_result, occ_current);
+          tmap["sum_col"].stop();
+
+          tmap["sum_ortho"].start();
+
+          tmap["sum_ortho"].stop();
+
+          if ( onpe0 )
+          {
+            for (int i=0; i<(wf.sd(ispin,ikp)->c()).n(); i++)
+            {
+              cout << s_.ctrl.mditer << " " << i << " " << occ_result[i] << endl;
+              ehp_count += occ_result[i];
+            }
+            cout << "projsum = " << ehp_count << endl;
+          }
+
+
+/*
           std::string filebase = s_.ctrl.saveprojfilebase;
           std::ostringstream oss;
           oss.width(8);  oss.fill('0');  oss << s_.ctrl.mditer;
@@ -729,6 +767,7 @@ void EhrenSampleStepper::step(int niter)
          	}
 	       os.close();
 	     } 
+	    */
        }
       }
      }
