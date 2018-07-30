@@ -3652,22 +3652,6 @@ void ComplexMatrix::sum_columns_square_occ(std::vector<double>& occ_result, std:
         }
       }
     }
-  {
-    int blocksize = ( (jb+1) * maxbs > n_ ) ? n_ % maxbs : maxbs;
-    t.getsub(*this,t.m(),blocksize,ia,ja);
-    ja += blocksize;
-    if ( t.active() )
-    {
-      // this is done only on pe 0
-      for ( int jj = 0; jj < blocksize; jj++ )
-      {
-        for ( int ii = 0; ii < m_; ii++ )
-        {
-          occ_result[ii]+=norm(t.val[ii+t.mloc()*jj])*occ_current[jj+jb*maxbs];
-          //          occ_result[jj+jb*maxbs]+=norm(t.val[ii+t.mloc()*jj])*occ_current[ii];
-        }
-      }
-    }
   }
 }
 
