@@ -1391,7 +1391,7 @@ void ComplexMatrix::zger(complex<double> alpha,
   assert(x.n()==m_);
   assert(y.n()==n_);
 
-#if SCALAPACK
+#ifdef HAVE_SCALAPACK
   int ione=1;
 
   int ix = kx+1;
