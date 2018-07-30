@@ -81,14 +81,12 @@ EhrenSampleStepper::EhrenSampleStepper(Sample& s, int nitscf, int nite) :
    Wavefunction* wf2 = new Wavefunction(s.wf);
    Wavefunction* wf3 = new Wavefunction(s.wf);
    Wavefunction* wf4 = new Wavefunction(s.wf);
-   Wavefunction* wf5 = new Wavefunction(s.wf); //DCY  
- 
+
    wfdeque.push_back ( wf0 );
    wfdeque.push_back ( wf1 );
    wfdeque.push_back ( wf2 );
    wfdeque.push_back ( wf3 );
    wfdeque.push_back ( wf4 );
-   wfdeque.push_back ( wf5 );  //DCY
 
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -582,10 +580,7 @@ void EhrenSampleStepper::step(int niter)
        if ( wf_dyn == "SOTD" ) wfv_is_new=false;
     }
 
-    if ((iter == 0) && (wf_dyn!="FORKTD")) {
-          *wfdeque[5] = s_.wf; // DCY store ref_wf for projections
-          if ( onpe0 ) cout << "Initial WF Stored for Projections. " << endl;
-          }
+
              
     if (wf_dyn=="FORKTD") {
        // AS: initialize wfdeque[0] with 0, it will be k_1
@@ -599,11 +594,7 @@ void EhrenSampleStepper::step(int niter)
        // AS: initialize wfdeque[4] with wf, to keep a copy
        *wfdeque[4]=s_.wf;
 
-     // DCY
-     if (iter == 0) {
-          *wfdeque[5] = s_.wf; // DCY store ref_wf for projections
-          if ( onpe0 ) cout << "Initial WF Stored for Projections. " << endl;
-          }
+
     }
              
     tmap["efn"].start();
@@ -674,7 +665,7 @@ void EhrenSampleStepper::step(int niter)
        delete(to_diag_wf1);
     }
 
-// DCY print cij matrix to individual files
+// DCY print projected occupations to output file
 // if saveprojfreq variable set, save cij matrices in text format
     if (s_.ctrl.saveprojfreq > 0)
     {
