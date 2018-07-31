@@ -1140,9 +1140,9 @@ void ComplexMatrix::getsub(const ComplexMatrix &a,
   assert(m<=a.m());
   int ione = 1;
   int gictxt;
-  //Cblacs_get( 0, 0, &gictxt);
+  Cblacs_get( 0, 0, &gictxt);
   //ewd:  Cblacs_get returns wrong context handle for multiple k-points
-  gictxt = ictxt_;
+  //gictxt = ictxt_;
   pzgemr2d(&m,&n,a.val,&iap,&jap,a.desc_,val,&ione,&ione,desc_,&gictxt);
 #else
   for ( int j = 0; j < n; j++ )
