@@ -716,6 +716,7 @@ void EhrenSampleStepper::step(int niter)
               cout << s_.ctrl.mditer << " " << i << " " << occ_result[i] << endl;
               ehp_count += occ_result[i];
             }
+            cout << "</projections>" << endl;
             cout << "projsum = " << ehp_count << endl;
           }
 
