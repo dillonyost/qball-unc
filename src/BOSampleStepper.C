@@ -1217,6 +1217,7 @@ void BOSampleStepper::step(int niter)
         {
            tmap["mlwf"].start();
            SlaterDet& sd = *(wf.sd(0,0));
+          mlwft->update();
           mlwft->compute_transform();
 
           if ( compute_mlwf )
