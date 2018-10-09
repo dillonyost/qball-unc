@@ -161,6 +161,7 @@ using namespace std;
 #include "NetCharge.h"
 #include "EsmBC.h"
 #include "EsmW.h"
+#include "IsolatedElectrostatic.h"
 #include "FcpThermostat.h"
 #include "FcpThTemp.h"
 #include "FcpThTime.h"
@@ -415,6 +416,7 @@ int main(int argc, char **argv, char **envp)
   ui->addVar(new NetCharge(s));
   ui->addVar(new EsmBC(s));
   ui->addVar(new EsmW(s));
+  ui->addVar(new IsolatedElectrostatic(s));
   ui->addVar(new FcpThermostat(s));
   ui->addVar(new FcpThTemp(s));
   ui->addVar(new FcpThTime(s));

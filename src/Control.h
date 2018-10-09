@@ -129,6 +129,8 @@ struct Control
   string esm_bc;
   double esm_w;
 
+  string isolated_electrostatic; // YY isolated electrostatic method (only MT now)
+
   std::string fcp_thermostat;
   double fcp_th_temp;
   double fcp_th_time;
