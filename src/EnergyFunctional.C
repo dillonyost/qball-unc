@@ -173,6 +173,8 @@ EnergyFunctional::EnergyFunctional( Sample& s, const Wavefunction& wf, ChargeDen
   rhogt.resize(ngloc);
   rhopst.resize(ngloc);
 
+  rhoiong.resize(ngloc); // YY MT
+
   veff_g.resize(wf_.nspin());
   if (s_.ctrl.ultrasoft) {
     for ( int ispin = 0; ispin < wf_.nspin(); ispin++ )
@@ -346,6 +348,7 @@ void EnergyFunctional::update_vhxc(void) {
   const double omega = cell.volume();
   const double omega_inv = 1.0 / omega;
   const double *const g2i = vbasis_->g2i_ptr();
+  const double *const g2 = vbasis_->g2_ptr();
   const double fpi = 4.0 * M_PI;
   const double tpi = 2.0 * M_PI;
   const int ngloc = vbasis_->localsize();
@@ -461,12 +464,17 @@ void EnergyFunctional::update_vhxc(void) {
   // YY debug MT method
   if (true && s_.ctrl.isolated_electrostatic == "mt" && vbasis_->context().mype() == 0)
   {
+
     cout << "isolated electrostatic interaction by MT method" << endl;
     cout << vft->np0() << " " << vft->np1()  << " " << vft->np2() << endl;
     double alpha = 2.9;
     double upperbound = 1.0;
     double ecutrho = wf_.ecut() * 2.0 * 4.0; // in Ry unit to be compared with QE code
     double beta = 0.0;
+    const int* idx = vbasis_->idx_ptr();
+    for ( int ig = 0; ig < ngloc; ig++ ) {
+        rhogt[ig] = rhoelg[ig] + rhopst[ig];
+    }
     while( upperbound >1.0e-7 ) {
       alpha = alpha - 0.1;
       if (alpha < 0.0 ) 
@@ -478,24 +486,52 @@ void EnergyFunctional::update_vhxc(void) {
     cout << "alpha " << alpha << " beta " << beta  << " ecutrho " << ecutrho << endl ;
     //int idx0 = vft->np0() * vft->np1() * vft->np2_loc(); // equal to np012loc()
     int idx0 = vft->np2_first();
-    int idx, i, j, k;
+    int idxx, i, j, k;
     D3vector r;
     cout << "idx0 " << idx0 << endl;
     cout << "smooth_coulomb_r " << smooth_coulomb_r(0.5,alpha) << endl;
+    aux.resize(vft->np012loc());
+    aux_g.resize(vbasis_->localsize());
     for(int ir = 0; ir < vft->np012loc(); ir++) {
-      idx = idx0 + ir;
-      k = idx / ( vft->np0() * vft->np1() );
-      idx = idx - ( vft->np0() * vft->np1() ) * k;
-      j = idx / vft->np0();
-      idx = idx - vft->np0() * j;
-      i = idx;
+      idxx = idx0 + ir;
+      k = idxx / ( vft->np0() * vft->np1() );
+      idxx = idxx - ( vft->np0() * vft->np1() ) * k;
+      j = idxx / vft->np0();
+      idxx = idxx - vft->np0() * j;
+      i = idxx;
       r = cell.a(0) / vft->np0() * i 
          + cell.a(1) /vft->np1() * j
          + cell.a(2) /vft->np2() * k;
         
       //cout << i << " " << j << " " << k << endl;
       //cell.a(0)
+      cell.fold_in_ws(r);
+      aux[ir] = smooth_coulomb_r(length(r),alpha);
     }
+    vft->forward(&aux[0],&aux_g[0]);
+    wg_corr.resize(vbasis_->localsize());
+    for(int ig = 0; ig < ngloc; ig++) {
+      wg_corr[ig] = omega * real(aux_g[ig]) - smooth_coulomb_g(g2[ig],alpha,beta);
+      //cout << "wg_corr " << ig << " " << wg_corr[ig] << " " << g2[ig] << endl;
+      wg_corr[ig] = wg_corr[ig] * exp(-g2[ig] * beta / 4.0) * exp(-g2[ig] * beta / 4.0);
+    }
+    for(int ig = 1; ig < ngloc; ig++) {
+      wg_corr[ig] = 2.0 * wg_corr[ig];
+    }
+    
+
+    double eh_corr = 0.0;
+    double eewald_corr = 0.0;
+    for(int ig = 0; ig < ngloc; ig++) {
+      eh_corr = eh_corr + abs(rhoelg[ig]) * abs(rhoelg[ig]) * wg_corr[ig];
+      eewald_corr = eewald_corr + abs(rhoiong[ig]) * abs(rhoiong[ig]) * wg_corr[ig];
+      //eh_corr = eh_corr + abs(rhopst[ig]) * abs(rhopst[ig]) * wg_corr[ig];
+    }
+    eh_corr = 0.5 * 2.0 * eh_corr * omega;
+    eewald_corr = 0.5 * 2.0 * eewald_corr * omega;
+    cout << "eh_corr " << eh_corr << endl;
+    cout << "eewald_corr " << eewald_corr << endl;
+    
     cout << cell.a(0) << " " << cell.a(1) << " " << cell.a(2) << endl;
     
   }
@@ -1886,6 +1922,9 @@ void EnergyFunctional::atoms_moved(void)
   const AtomSet& atoms = s_.atoms;
   int ngloc = vbasis_->localsize();
 
+  const UnitCell& cell = wf_.cell();
+  const double omega = cell.volume();
+
   // fill tau0, taum with values in atom_list
   atoms.get_positions(tau0,true);
   sf.update(tau0,*vbasis_);
@@ -1894,6 +1933,7 @@ void EnergyFunctional::atoms_moved(void)
   memset( (void*)&vion_local_g[0], 0, 2*ngloc*sizeof(double) );
   memset( (void*)&dvion_local_g[0], 0, 2*ngloc*sizeof(double) );
   memset( (void*)&rhopst[0], 0, 2*ngloc*sizeof(double) );
+  memset( (void*)&rhoiong[0], 0, 2*ngloc*sizeof(double) );
 
   for ( int is = 0; is < atoms.nsp(); is++ )
   {
@@ -1904,11 +1944,12 @@ void EnergyFunctional::atoms_moved(void)
       rhopst[ig] += sg * rhops[is][ig];
       vion_local_g[ig] += sg * vps[is][ig];
       dvion_local_g[ig] += sg * dvps[is][ig];
+      rhoiong[ig] -= sg * atoms.species_list[is]->zval() / omega; // YY for MT method
     }
+    //cout << "zval " << atoms.species_list[is]->zval() << endl;
   }
   
   // compute esr: pseudocharge repulsion energy
-  const UnitCell& cell = wf_.cell();
   const double omega_inv = 1.0 / cell.volume();
   
   esr_  = 0.0;
@@ -2098,6 +2139,9 @@ void EnergyFunctional::print(ostream& os) const
      << "  <eps>    " << setw(15) << eps() << " </eps>\n"
      << "  <enl>    " << setw(15) << enl() << " </enl>\n"
      << "  <ecoul>  " << setw(15) << ecoul() << " </ecoul>\n"
+     << "  <ehart>  " << setw(15) << ehart() << " </ehart>\n"
+     << "  <esr>  " << setw(15) << esr() << " </esr>\n"
+     << "  <eself>  " << setw(15) << eself() << " </eself>\n"
      << "  <exc>    " << setw(15) << exc() << " </exc>\n"
      << "  <esr>    " << setw(15) << esr() << " </esr>\n"
      << "  <eself>  " << setw(15) << eself() << " </eself>\n"

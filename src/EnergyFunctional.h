@@ -83,6 +83,11 @@ class EnergyFunctional
   vector<complex<double> > tmp_r, vion_local_g, dvion_local_g, vlocal_g,
       rhopst, rhogt, rhoelg, vtemp;
   vector<double> ftmp;
+  // YY for MT
+  vector<complex<double> > aux, aux_g;
+  vector<double> wg_corr;
+  vector<complex<double> > rhoiong;
+  // YY
   
   vector<vector<double> > tau0, taum, fion_esr;
   vector<double> zv_, rcps_;
