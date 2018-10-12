@@ -102,9 +102,11 @@ class EnergyFunctional
     sigma_enl, sigma_esr, sigma;
 
   // YY: for isolated MT 
-  double smooth_coulomb_r(double r, double alpha);
-  double smooth_coulomb_g(double q2, double alpha, double beta);
+  double smooth_coulomb_r(double r);
+  double smooth_coulomb_g(double q2);
+  double mt_alpha, mt_beta;
   // YY 
+  void mt_init_wg_corr(void);
 
   public:
 

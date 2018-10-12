@@ -464,61 +464,7 @@ void EnergyFunctional::update_vhxc(void) {
   // YY debug MT method
   if (true && s_.ctrl.isolated_electrostatic == "mt" && vbasis_->context().mype() == 0)
   {
-
-    cout << "isolated electrostatic interaction by MT method" << endl;
-    cout << vft->np0() << " " << vft->np1()  << " " << vft->np2() << endl;
-    double alpha = 2.9;
-    double upperbound = 1.0;
-    double ecutrho = wf_.ecut() * 2.0 * 4.0; // in Ry unit to be compared with QE code
-    double beta = 0.0;
-    const int* idx = vbasis_->idx_ptr();
-    for ( int ig = 0; ig < ngloc; ig++ ) {
-        rhogt[ig] = rhoelg[ig] + rhopst[ig];
-    }
-    while( upperbound >1.0e-7 ) {
-      alpha = alpha - 0.1;
-      if (alpha < 0.0 ) 
-        cout << "optimal alpha not found for isolated electrostatic MT method" << endl;
-      upperbound = 2.0 * sqrt ( 2.0 * alpha / tpi ) * 
-                        erfc ( sqrt ( ecutrho / 4.0 / alpha) );
-    }
-    beta = 0.5 / alpha;
-    cout << "alpha " << alpha << " beta " << beta  << " ecutrho " << ecutrho << endl ;
-    //int idx0 = vft->np0() * vft->np1() * vft->np2_loc(); // equal to np012loc()
-    int idx0 = vft->np2_first();
-    int idxx, i, j, k;
-    D3vector r;
-    cout << "idx0 " << idx0 << endl;
-    cout << "smooth_coulomb_r " << smooth_coulomb_r(0.5,alpha) << endl;
-    aux.resize(vft->np012loc());
-    aux_g.resize(vbasis_->localsize());
-    for(int ir = 0; ir < vft->np012loc(); ir++) {
-      idxx = idx0 + ir;
-      k = idxx / ( vft->np0() * vft->np1() );
-      idxx = idxx - ( vft->np0() * vft->np1() ) * k;
-      j = idxx / vft->np0();
-      idxx = idxx - vft->np0() * j;
-      i = idxx;
-      r = cell.a(0) / vft->np0() * i 
-         + cell.a(1) /vft->np1() * j
-         + cell.a(2) /vft->np2() * k;
-        
-      //cout << i << " " << j << " " << k << endl;
-      //cell.a(0)
-      cell.fold_in_ws(r);
-      aux[ir] = smooth_coulomb_r(length(r),alpha);
-    }
-    vft->forward(&aux[0],&aux_g[0]);
-    wg_corr.resize(vbasis_->localsize());
-    for(int ig = 0; ig < ngloc; ig++) {
-      wg_corr[ig] = omega * real(aux_g[ig]) - smooth_coulomb_g(g2[ig],alpha,beta);
-      //cout << "wg_corr " << ig << " " << wg_corr[ig] << " " << g2[ig] << endl;
-      wg_corr[ig] = wg_corr[ig] * exp(-g2[ig] * beta / 4.0) * exp(-g2[ig] * beta / 4.0);
-    }
-    for(int ig = 1; ig < ngloc; ig++) {
-      wg_corr[ig] = 2.0 * wg_corr[ig];
-    }
-    
+    mt_init_wg_corr();
 
     double eh_corr = 0.0;
     double eewald_corr = 0.0;
@@ -527,8 +473,8 @@ void EnergyFunctional::update_vhxc(void) {
       eewald_corr = eewald_corr + abs(rhoiong[ig]) * abs(rhoiong[ig]) * wg_corr[ig];
       //eh_corr = eh_corr + abs(rhopst[ig]) * abs(rhopst[ig]) * wg_corr[ig];
     }
-    eh_corr = 0.5 * 2.0 * eh_corr * omega;
-    eewald_corr = 0.5 * 2.0 * eewald_corr * omega;
+    eh_corr = 0.5 * eh_corr * omega;
+    eewald_corr = 0.5 * eewald_corr * omega;
     cout << "eh_corr " << eh_corr << endl;
     cout << "eewald_corr " << eewald_corr << endl;
     
@@ -2164,25 +2110,25 @@ void EnergyFunctional::print_memory(ostream&os, double& totsum, double& locsum) 
   nlp[0][0]->print_memory(os,kmult,kmultloc,totsum,locsum);
 }
 
-double EnergyFunctional::smooth_coulomb_r(double r, double alpha)
+double EnergyFunctional::smooth_coulomb_r(double r)
 {
   const double pi = M_PI;
   if ( r > 1.0e-6 ) {
-    return erf(sqrt(alpha)*r)/r;
+    return erf(sqrt(mt_alpha)*r)/r;
   }
   else {
-    return 2.0/sqrt(pi)*sqrt(alpha);
+    return 2.0/sqrt(pi)*sqrt(mt_alpha);
   }
 }
 
-double EnergyFunctional::smooth_coulomb_g(double q2, double alpha, double beta)
+double EnergyFunctional::smooth_coulomb_g(double q2)
 {
   const double fpi = 4.0 * M_PI;
   if ( q2 > 1.0e-6 ) {
-    return fpi * exp(-q2/4.0/alpha)/q2;
+    return fpi * exp(-q2/4.0/mt_alpha)/q2;
   }
   else {
-    return -1.0 * fpi * (1.0/4.0/alpha + 2.0 * beta/4.0);
+    return -1.0 * fpi * (1.0/4.0/mt_alpha + 2.0 * mt_beta/4.0);
   }
 }
   
@@ -2191,4 +2137,83 @@ ostream& operator<< ( ostream& os, const EnergyFunctional& e )
 { 
   e.print(os); 
   return os;
+}
+
+void EnergyFunctional::mt_init_wg_corr(void) 
+{
+  const double fpi = 4.0 * M_PI;
+  const double tpi = 2.0 * M_PI;
+  const Wavefunction& wf = s_.wf;
+  const UnitCell& cell = wf.cell();
+  const int ngloc = vbasis_->localsize();
+  const double omega = cell.volume();
+  const double *const g2 = vbasis_->g2_ptr();
+
+  cout << "isolated electrostatic interaction by MT method" << endl;
+  cout << vft->np0() << " " << vft->np1()  << " " << vft->np2() << endl;
+
+  double upperbound = 1.0;
+  double ecutrho = wf_.ecut() * 2.0 * 4.0; // in Ry unit to be compared with QE code
+  mt_alpha = 2.9;
+  mt_beta = 0.0;
+  const int* idx = vbasis_->idx_ptr();
+
+  while( upperbound >1.0e-7 ) {
+    mt_alpha = mt_alpha - 0.1;
+    if (mt_alpha < 0.0 ) 
+      cout << "optimal alpha not found for isolated electrostatic MT method" << endl;
+    upperbound = 2.0 * sqrt ( 2.0 * mt_alpha / tpi ) * 
+                      erfc ( sqrt ( ecutrho / 4.0 / mt_alpha) );
+  }
+  mt_beta = 0.5 / mt_alpha;
+  cout << "alpha " << mt_alpha << " beta " << mt_beta  << " ecutrho " << ecutrho << endl ;
+  //int idx0 = vft->np0() * vft->np1() * vft->np2_loc(); // equal to np012loc()
+  int idx0 = vft->np2_first();
+  int idxx, i, j, k;
+  D3vector r;
+  cout << "idx0 " << idx0 << endl;
+  cout << "smooth_coulomb_r " << smooth_coulomb_r(0.5) << endl;
+  aux.resize(vft->np012loc());
+  aux_g.resize(vbasis_->localsize());
+  for(int ir = 0; ir < vft->np012loc(); ir++) {
+    idxx = idx0 + ir;
+    k = idxx / ( vft->np0() * vft->np1() );
+    idxx = idxx - ( vft->np0() * vft->np1() ) * k;
+    j = idxx / vft->np0();
+    idxx = idxx - vft->np0() * j;
+    i = idxx;
+    r = cell.a(0) / vft->np0() * i 
+       + cell.a(1) /vft->np1() * j
+       + cell.a(2) /vft->np2() * k;
+      
+    //cout << i << " " << j << " " << k << endl;
+    //cell.a(0)
+    cell.fold_in_ws(r);
+    aux[ir] = smooth_coulomb_r(length(r));
+  }
+  vft->forward(&aux[0],&aux_g[0]);
+  wg_corr.resize(vbasis_->localsize());
+  for(int ig = 0; ig < ngloc; ig++) {
+    wg_corr[ig] = omega * real(aux_g[ig]) - smooth_coulomb_g(g2[ig]);
+    //cout << "wg_corr " << ig << " " << wg_corr[ig] << " " << g2[ig] << endl;
+    wg_corr[ig] = wg_corr[ig] * exp(-g2[ig] * mt_beta / 4.0) * exp(-g2[ig] * mt_beta / 4.0);
+  }
+  for(int ig = 1; ig < ngloc; ig++) {
+    wg_corr[ig] = 2.0 * wg_corr[ig];
+  }
+  
+
+  //double eh_corr = 0.0;
+  //double eewald_corr = 0.0;
+  //for(int ig = 0; ig < ngloc; ig++) {
+  //  eh_corr = eh_corr + abs(rhoelg[ig]) * abs(rhoelg[ig]) * wg_corr[ig];
+  //  eewald_corr = eewald_corr + abs(rhoiong[ig]) * abs(rhoiong[ig]) * wg_corr[ig];
+  //  //eh_corr = eh_corr + abs(rhopst[ig]) * abs(rhopst[ig]) * wg_corr[ig];
+  //}
+  //eh_corr = 0.5 * 2.0 * eh_corr * omega;
+  //eewald_corr = 0.5 * 2.0 * eewald_corr * omega;
+  //cout << "eh_corr " << eh_corr << endl;
+  //cout << "eewald_corr " << eewald_corr << endl;
+  //
+  //cout << cell.a(0) << " " << cell.a(1) << " " << cell.a(2) << endl;
 }
