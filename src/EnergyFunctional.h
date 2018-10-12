@@ -87,6 +87,9 @@ class EnergyFunctional
   vector<complex<double> > aux, aux_g;
   vector<double> wg_corr;
   vector<complex<double> > rhoiong;
+  vector<complex<double> > vh_corr, vloc_corr;
+  double eh_corr;
+  double eewald_corr;
   // YY
   
   vector<vector<double> > tau0, taum, fion_esr;

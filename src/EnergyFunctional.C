@@ -185,6 +185,13 @@ EnergyFunctional::EnergyFunctional( Sample& s, const Wavefunction& wf, ChargeDen
     for ( int ispin = 0; ispin < wf_.nspin(); ispin++ )
       vxc_g[ispin].resize(ngloc);
   }
+
+  // YY MT
+  vh_corr.resize(ngloc);
+  vloc_corr.resize(ngloc);
+  memset( (void*)&vh_corr[0], 0, 2*ngloc*sizeof(double) );
+  memset( (void*)&vloc_corr[0], 0, 2*ngloc*sizeof(double) );
+  // YY
   
   tau0.resize(nsp_);
   taum.resize(nsp_);
@@ -466,12 +473,20 @@ void EnergyFunctional::update_vhxc(void) {
   {
     mt_init_wg_corr();
 
-    double eh_corr = 0.0;
-    double eewald_corr = 0.0;
+    eh_corr = 0.0;
+    eewald_corr = 0.0;
+
     for(int ig = 0; ig < ngloc; ig++) {
+      vh_corr[ig] = complex<double>(0.0,0.0);
+    }
+    for(int ig = 0; ig < ngloc; ig++) {
+      vh_corr[ig] = wg_corr[ig] * rhoelg[ig];
       eh_corr = eh_corr + abs(rhoelg[ig]) * abs(rhoelg[ig]) * wg_corr[ig];
       eewald_corr = eewald_corr + abs(rhoiong[ig]) * abs(rhoiong[ig]) * wg_corr[ig];
       //eh_corr = eh_corr + abs(rhopst[ig]) * abs(rhopst[ig]) * wg_corr[ig];
+    }
+    for(int ig = 1; ig < ngloc; ig++) {
+      vh_corr[ig] = 0.5 * vh_corr[ig];
     }
     eh_corr = 0.5 * eh_corr * omega;
     eewald_corr = 0.5 * eewald_corr * omega;
@@ -520,16 +535,20 @@ void EnergyFunctional::update_vhxc(void) {
   
      vbasis_->context().dsum(2,1,&tsum[0],2);
      eps_   = tsum[0];
-     ehart_ = tsum[1];
+     ehart_ = tsum[1] + eh_corr + eewald_corr;
   
      // compute vlocal_g = vion_local_g + vhart_g
      // where vhart_g = 4 * pi * (rhoelg + rhopst) * g2i  
      if (s_.ctrl.tddft_involved)  // AS: the charge density based on hamil_wf has to be used
-        for ( int ig = 0; ig < ngloc; ig++ )
+        for ( int ig = 0; ig < ngloc; ig++ ) {
            vlocal_g[ig] = vion_local_g[ig] + fpi * hamil_rhogt[ig] * g2i[ig];
+           vlocal_g[ig] += vh_corr[ig];
+        }
      else
-        for ( int ig = 0; ig < ngloc; ig++ )
-           vlocal_g[ig] = vion_local_g[ig] + fpi * rhogt[ig] * g2i[ig];
+        for ( int ig = 0; ig < ngloc; ig++ ) {
+           vlocal_g[ig] = vion_local_g[ig] + fpi * rhogt[ig] * g2i[ig]; 
+           vlocal_g[ig] += vh_corr[ig];
+        }
 
   }
   else
@@ -1890,9 +1909,30 @@ void EnergyFunctional::atoms_moved(void)
       rhopst[ig] += sg * rhops[is][ig];
       vion_local_g[ig] += sg * vps[is][ig];
       dvion_local_g[ig] += sg * dvps[is][ig];
-      rhoiong[ig] -= sg * atoms.species_list[is]->zval() / omega; // YY for MT method
+      rhoiong[ig] = sg * atoms.species_list[is]->zval() / omega; // YY for MT method
     }
     //cout << "zval " << atoms.species_list[is]->zval() << endl;
+  }
+
+  if (true && s_.ctrl.isolated_electrostatic == "mt" && vbasis_->context().mype() == 0)
+  {
+    mt_init_wg_corr();
+
+    for(int ig = 0; ig < ngloc; ig++) {
+      vloc_corr[ig] = complex<double>(0.0,0.0);
+    }
+
+    for(int ig = 0; ig < ngloc; ig++) {
+      vloc_corr[ig] = - wg_corr[ig] * rhoiong[ig];
+    }
+    for(int ig = 1; ig < ngloc; ig++) {
+      vloc_corr[ig] = 0.5 * vh_corr[ig];
+    }
+    for ( int ig = 0; ig < ngloc; ig++ )
+    {
+      vion_local_g[ig] += vloc_corr[ig];
+    }
+    
   }
   
   // compute esr: pseudocharge repulsion energy
