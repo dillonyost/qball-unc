@@ -1909,7 +1909,7 @@ void EnergyFunctional::atoms_moved(void)
       rhopst[ig] += sg * rhops[is][ig];
       vion_local_g[ig] += sg * vps[is][ig];
       dvion_local_g[ig] += sg * dvps[is][ig];
-      rhoiong[ig] = sg * atoms.species_list[is]->zval() / omega; // YY for MT method
+      rhoiong[ig] += sg * atoms.species_list[is]->zval() / omega; // YY for MT method
     }
     //cout << "zval " << atoms.species_list[is]->zval() << endl;
   }
@@ -1926,7 +1926,7 @@ void EnergyFunctional::atoms_moved(void)
       vloc_corr[ig] = - wg_corr[ig] * rhoiong[ig];
     }
     for(int ig = 1; ig < ngloc; ig++) {
-      vloc_corr[ig] = 0.5 * vh_corr[ig];
+      vloc_corr[ig] = 0.5 * vloc_corr[ig];
     }
     for ( int ig = 0; ig < ngloc; ig++ )
     {
