@@ -469,7 +469,8 @@ void EnergyFunctional::update_vhxc(void) {
   ehart_ = 0.0;
 
   // YY debug MT method
-  if (true && s_.ctrl.isolated_electrostatic == "mt" && vbasis_->context().mype() == 0)
+  //if (true && s_.ctrl.isolated_electrostatic == "mt" && vbasis_->context().mype() == 0)
+  if (true && s_.ctrl.isolated_electrostatic == "mt")
   {
     mt_init_wg_corr();
 
@@ -485,11 +486,24 @@ void EnergyFunctional::update_vhxc(void) {
       eewald_corr = eewald_corr + abs(rhoiong[ig]) * abs(rhoiong[ig]) * wg_corr[ig];
       //eh_corr = eh_corr + abs(rhopst[ig]) * abs(rhopst[ig]) * wg_corr[ig];
     }
-    for(int ig = 1; ig < ngloc; ig++) {
+
+    int gstart = 0;
+    if (g2[0] < 1.0e-8) gstart = 1; 
+
+    for(int ig = gstart; ig < ngloc; ig++) {
       vh_corr[ig] = 0.5 * vh_corr[ig];
     }
     eh_corr = 0.5 * eh_corr * omega;
     eewald_corr = 0.5 * eewald_corr * omega;
+    double tsum_corr[2]; 
+    tsum_corr[0] = 0.0;
+    tsum_corr[1] = 0.0;
+    tsum_corr[0] = eh_corr;
+    tsum_corr[1] = eewald_corr;
+    vbasis_->context().dsum(2,1,&tsum_corr[0],2);
+    eh_corr = tsum_corr[0];
+    eewald_corr = tsum_corr[1];
+
     cout << "eh_corr " << eh_corr << endl;
     cout << "eewald_corr " << eewald_corr << endl;
     
@@ -1886,6 +1900,7 @@ void EnergyFunctional::atoms_moved(void)
 {
   const AtomSet& atoms = s_.atoms;
   int ngloc = vbasis_->localsize();
+  const double *const g2 = vbasis_->g2_ptr();
 
   const UnitCell& cell = wf_.cell();
   const double omega = cell.volume();
@@ -1914,7 +1929,8 @@ void EnergyFunctional::atoms_moved(void)
     //cout << "zval " << atoms.species_list[is]->zval() << endl;
   }
 
-  if (true && s_.ctrl.isolated_electrostatic == "mt" && vbasis_->context().mype() == 0)
+  //if (true && s_.ctrl.isolated_electrostatic == "mt" && vbasis_->context().mype() == 0)
+  if (true && s_.ctrl.isolated_electrostatic == "mt")
   {
     mt_init_wg_corr();
 
@@ -1925,7 +1941,10 @@ void EnergyFunctional::atoms_moved(void)
     for(int ig = 0; ig < ngloc; ig++) {
       vloc_corr[ig] = - wg_corr[ig] * rhoiong[ig];
     }
-    for(int ig = 1; ig < ngloc; ig++) {
+    int gstart = 0;
+    if (g2[0] < 1.0e-8) gstart = 1; 
+
+    for(int ig = gstart; ig < ngloc; ig++) {
       vloc_corr[ig] = 0.5 * vloc_corr[ig];
     }
     for ( int ig = 0; ig < ngloc; ig++ )
@@ -2208,7 +2227,7 @@ void EnergyFunctional::mt_init_wg_corr(void)
   mt_beta = 0.5 / mt_alpha;
   cout << "alpha " << mt_alpha << " beta " << mt_beta  << " ecutrho " << ecutrho << endl ;
   //int idx0 = vft->np0() * vft->np1() * vft->np2_loc(); // equal to np012loc()
-  int idx0 = vft->np2_first();
+  int idx0 = vft->np0() * vft->np1() * vft->np2_first();
   int idxx, i, j, k;
   D3vector r;
   cout << "idx0 " << idx0 << endl;
@@ -2238,7 +2257,12 @@ void EnergyFunctional::mt_init_wg_corr(void)
     //cout << "wg_corr " << ig << " " << wg_corr[ig] << " " << g2[ig] << endl;
     wg_corr[ig] = wg_corr[ig] * exp(-g2[ig] * mt_beta / 4.0) * exp(-g2[ig] * mt_beta / 4.0);
   }
-  for(int ig = 1; ig < ngloc; ig++) {
+
+  int gstart = 0;
+  if (g2[0] < 1.0e-8) gstart = 1; 
+  cout << "gstart = " << gstart << endl;
+
+  for(int ig = gstart; ig < ngloc; ig++) {
     wg_corr[ig] = 2.0 * wg_corr[ig];
   }
   
