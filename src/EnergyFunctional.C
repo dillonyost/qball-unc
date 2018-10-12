@@ -470,7 +470,7 @@ void EnergyFunctional::update_vhxc(void) {
 
   // YY debug MT method
   //if (true && s_.ctrl.isolated_electrostatic == "mt" && vbasis_->context().mype() == 0)
-  if (true && s_.ctrl.isolated_electrostatic == "mt")
+  if (s_.ctrl.isolated_electrostatic == "mt")
   {
     mt_init_wg_corr();
 
@@ -504,10 +504,10 @@ void EnergyFunctional::update_vhxc(void) {
     eh_corr = tsum_corr[0];
     eewald_corr = tsum_corr[1];
 
-    cout << "eh_corr " << eh_corr << endl;
-    cout << "eewald_corr " << eewald_corr << endl;
+    //cout << "eh_corr " << eh_corr << endl;
+    //cout << "eewald_corr " << eewald_corr << endl;
     
-    cout << cell.a(0) << " " << cell.a(1) << " " << cell.a(2) << endl;
+    //cout << cell.a(0) << " " << cell.a(1) << " " << cell.a(2) << endl;
     
   }
 
@@ -1088,6 +1088,7 @@ void EnergyFunctional::update_exc_ehart_eps(void)
   const int ngloc = vbasis_->localsize();
   double tsum[2];
 
+
   // compute total electronic density: rhoelg = rho_up + rho_dn
   if ( wf.nspin() == 1 )
   {
@@ -1102,6 +1103,36 @@ void EnergyFunctional::update_exc_ehart_eps(void)
     {
       rhoelg[ig] = omega_inv * ( cd_.rhog[0][ig] + cd_.rhog[1][ig] );
     }
+  }
+
+  if (s_.ctrl.isolated_electrostatic == "mt")
+  {
+    mt_init_wg_corr();
+
+    eh_corr = 0.0;
+    eewald_corr = 0.0;
+
+    for(int ig = 0; ig < ngloc; ig++) {
+      eh_corr = eh_corr + abs(rhoelg[ig]) * abs(rhoelg[ig]) * wg_corr[ig];
+      eewald_corr = eewald_corr + abs(rhoiong[ig]) * abs(rhoiong[ig]) * wg_corr[ig];
+    }
+
+    eh_corr = 0.5 * eh_corr * omega;
+    eewald_corr = 0.5 * eewald_corr * omega;
+    double tsum_corr[2]; 
+    tsum_corr[0] = 0.0;
+    tsum_corr[1] = 0.0;
+    tsum_corr[0] = eh_corr;
+    tsum_corr[1] = eewald_corr;
+    vbasis_->context().dsum(2,1,&tsum_corr[0],2);
+    eh_corr = tsum_corr[0];
+    eewald_corr = tsum_corr[1];
+
+    //cout << "eh_corr " << eh_corr << endl;
+    //cout << "eewald_corr " << eewald_corr << endl;
+    
+    //cout << cell.a(0) << " " << cell.a(1) << " " << cell.a(2) << endl;
+    
   }
 
   // update XC energy and potential
@@ -1930,7 +1961,7 @@ void EnergyFunctional::atoms_moved(void)
   }
 
   //if (true && s_.ctrl.isolated_electrostatic == "mt" && vbasis_->context().mype() == 0)
-  if (true && s_.ctrl.isolated_electrostatic == "mt")
+  if (s_.ctrl.isolated_electrostatic == "mt")
   {
     mt_init_wg_corr();
 
@@ -2207,9 +2238,10 @@ void EnergyFunctional::mt_init_wg_corr(void)
   const int ngloc = vbasis_->localsize();
   const double omega = cell.volume();
   const double *const g2 = vbasis_->g2_ptr();
-
+  if ( s_.ctxt_.oncoutpe() ) {
   cout << "isolated electrostatic interaction by MT method" << endl;
-  cout << vft->np0() << " " << vft->np1()  << " " << vft->np2() << endl;
+  }
+  //cout << vft->np0() << " " << vft->np1()  << " " << vft->np2() << endl;
 
   double upperbound = 1.0;
   double ecutrho = wf_.ecut() * 2.0 * 4.0; // in Ry unit to be compared with QE code
@@ -2225,13 +2257,13 @@ void EnergyFunctional::mt_init_wg_corr(void)
                       erfc ( sqrt ( ecutrho / 4.0 / mt_alpha) );
   }
   mt_beta = 0.5 / mt_alpha;
-  cout << "alpha " << mt_alpha << " beta " << mt_beta  << " ecutrho " << ecutrho << endl ;
+  //cout << "alpha " << mt_alpha << " beta " << mt_beta  << " ecutrho " << ecutrho << endl ;
   //int idx0 = vft->np0() * vft->np1() * vft->np2_loc(); // equal to np012loc()
   int idx0 = vft->np0() * vft->np1() * vft->np2_first();
   int idxx, i, j, k;
   D3vector r;
-  cout << "idx0 " << idx0 << endl;
-  cout << "smooth_coulomb_r " << smooth_coulomb_r(0.5) << endl;
+  //cout << "idx0 " << idx0 << endl;
+  //cout << "smooth_coulomb_r " << smooth_coulomb_r(0.5) << endl;
   aux.resize(vft->np012loc());
   aux_g.resize(vbasis_->localsize());
   for(int ir = 0; ir < vft->np012loc(); ir++) {
@@ -2260,7 +2292,7 @@ void EnergyFunctional::mt_init_wg_corr(void)
 
   int gstart = 0;
   if (g2[0] < 1.0e-8) gstart = 1; 
-  cout << "gstart = " << gstart << endl;
+  //cout << "gstart = " << gstart << endl;
 
   for(int ig = gstart; ig < ngloc; ig++) {
     wg_corr[ig] = 2.0 * wg_corr[ig];
