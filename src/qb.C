@@ -158,6 +158,7 @@ using namespace std;
 #include "SaveDenFreq.h"
 #include "SaveWfFreq.h"
 #include "SaveProjFreq.h" 
+#include "CalDipFreq.h"
 #include "NetCharge.h"
 #include "EsmBC.h"
 #include "EsmW.h"
@@ -412,6 +413,7 @@ int main(int argc, char **argv, char **envp)
   ui->addVar(new SaveDenFreq(s));
   ui->addVar(new SaveWfFreq(s));
   ui->addVar(new SaveProjFreq(s));
+  ui->addVar(new CalDipFreq(s));
   ui->addVar(new NetCharge(s));
   ui->addVar(new EsmBC(s));
   ui->addVar(new EsmW(s));

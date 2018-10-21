@@ -1403,6 +1403,77 @@ if ( oncoutpe ) {
        }
     }
 
+    // if caldipfreq variable set, calculate total_charge and total_dip
+    if (s_.ctrl.caldipfreq > 0)
+    {
+       if (s_.ctrl.mditer%s_.ctrl.caldipfreq == 0 || s_.ctrl.mditer == 1)
+       {
+
+          const Context* wfctxt = s_.wf.spincontext(0);
+          const double omega = s_.wf.cell().volume();
+          FourierTransform* ft_ = cd_.vft();
+          if (wfctxt->mycol() == 0) {
+             vector<double> rhortmp(ft_->np012loc());
+             for (int j = 0; j < ft_->np012loc(); j++)
+                rhortmp[j] = cd_.rhor[0][j];
+             
+             for ( int i = 0; i < wfctxt->nprow(); i++ ) {
+                if ( i == wfctxt->myrow() ) {
+                   int size = ft_->np012loc();
+                   wfctxt->isend(1,1,&size,1,0,0);
+                   wfctxt->dsend(size,1,&rhortmp[0],1,0,0);
+                }
+             }
+             if ( wfctxt->oncoutpe() ) {
+                vector<double> tmprecv(ft_->np012());
+                int recvoffset = 0;
+
+                D3vector a0 = s_.wf.cell().a(0);
+                D3vector a1 = s_.wf.cell().a(1);
+                D3vector a2 = s_.wf.cell().a(2);
+                const int np0 = ft_->np0();
+                const int np1 = ft_->np1();
+                const int np2 = ft_->np2();
+                D3vector dft0 = a0/(double)np0;
+                D3vector dft1 = a1/(double)np1;
+                D3vector dft2 = a2/(double)np2;
+                  
+                for ( int i = 0; i < wfctxt->nprow(); i++ ) {
+                   int size = 0;
+                   wfctxt->irecv(1,1,&size,1,i,0);
+                   wfctxt->drecv(size,1,&tmprecv[recvoffset],1,i,0);
+                   recvoffset += size;
+
+                }
+
+                // write density data to file
+                int cnt = 0;
+                double total_charge = 0.0;
+                D3vector total_dipole;
+                D3vector r_pos;
+                for (int ii = 0; ii < np0; ii++) {
+                   const int ip = (ii + np0/2 ) % np0; 
+                   for (int jj = 0; jj < np1; jj++) {
+                      const int jp = (jj + np1/2 ) % np1; 
+                      for (int kk = 0; kk < np2; kk++) {
+			 const int kp = (kk + np2/2 ) % np2; 
+                         int index = ip + jp*np0 + kp*np0*np1; 
+                         r_pos = (ii * dft0 + jj * dft1 + kk * dft2)
+                                - (a0 + a1 + a2) / 2.0;
+			 total_charge += tmprecv[index] ;
+                         total_dipole -= r_pos * tmprecv[index] ;
+                      }
+                   }
+                }
+                total_charge *= omega / ft_->np012(); 
+                total_dipole *= omega / ft_->np012();
+                cout << setprecision(10) << "total_charge: " << total_charge << endl;
+                cout << setprecision(10) << "total_dipole: " << total_dipole << endl;
+             }
+          }
+       }
+    }
+
     // if savefreq variable set, checkpoint
     if (s_.ctrl.savefreq > 0)
     {
