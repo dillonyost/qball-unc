@@ -64,6 +64,7 @@ noinst_HEADERS =                            \
 	ClebschGordan.h                     \
 	clooper.h                           \
 	ComputeMLWFCmd.h                    \
+	ApplyElectricFieldPulseCmd.h        \
 	ConfinementPotential.h              \
 	ConstraintCmd.h                     \
 	Constraint.h                        \
@@ -348,6 +349,7 @@ libqbLink_a_SOURCES =                       \
 	qbox_xmlns.C                        \
 	isodate.C                           \
 	ComputeMLWFCmd.C                    \
+	ApplyElectricFieldPulseCmd.C        \
 	BasisMapping.C                      \
 	MLWFTransform.C                     \
 	TDMLWFTransform.C		    \

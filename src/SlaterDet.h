@@ -119,6 +119,8 @@ class SlaterDet {
 
   void kinetic_hpsi(FourierTransform& ft, const double* vxc_tau, SlaterDet& sdp) const; // YY
 
+  void apply_electric_field(int e_direction, double e_strength) ; // YY
+
   void randomize(double amplitude);
   void randomize_real(double amplitude);
   void randomize_us(double amplitude, AtomSet& as);
