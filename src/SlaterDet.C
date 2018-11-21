@@ -39,6 +39,7 @@
 #include "Timer.h"
 #include "PrintMem.h"
 
+
 #include <cstdlib>
 #include <iostream>
 #include <iomanip>
@@ -3541,3 +3542,58 @@ void SlaterDet::print_memory(ostream& os, int kmult, int kmultloc, double& totsu
     os << "<!-- memory sd.betapsi  :  " << setw(7) << betapsi_size << betapsi_unit << "  (" << betapsi_locsize << betapsi_locunit << " local) -->" << endl;
   }
 }
+
+////////////////////////////////////////////////////////////////////////////////
+void SlaterDet::apply_electric_field(int e_direction, double e_strength) {
+
+  assert(occ_.size() == c_.n());
+  int np0 = basis_->np(0);
+  int np1 = basis_->np(1);
+  int np2 = basis_->np(2);
+  FourierTransform ft(*basis_,np0,np1,np2);
+  vector<complex<double> > tmp(ft.np012loc());
+  const complex<double> I(0.0,1.0);
+  
+  assert(basis_->cell().volume() > 0.0);
+  UnitCell cell = basis_->cell();
+  const int np012loc = ft.np012loc();
+  double phase;
+
+  int idx0 = ft.np0() * ft.np1() * ft.np2_first();
+  int idxx, i, j, k;
+  D3vector r;
+  
+  for ( int lj=0; lj < c_.nblocks(); lj++ )
+    {
+      for ( int jj=0; jj < c_.nbs(lj); jj++ )
+        {
+	  // global state index
+	  const int nn = c_.j(lj,jj);
+	  //const double fac = prefac * occ_[nn];
+	  const int norig = lj*c_.nb()+jj;
+	  ft.backward(c_.cvalptr(norig*c_.mloc()), &tmp[0]);
+	  
+	  for ( int ir = 0; ir < np012loc; ir++ ) {
+            idxx = idx0 + ir;
+            k = idxx / ( ft.np0() * ft.np1() );
+            idxx = idxx - ( ft.np0() * ft.np1() ) * k;
+            j = idxx / ft.np0();
+            idxx = idxx - ft.np0() * j;
+            i = idxx;
+            r = cell.a(0) / ft.np0() * i
+               + cell.a(1) / ft.np1() * j
+               + cell.a(2) / ft.np2() * k;
+            cell.fold_in_ws(r);
+            phase = e_strength * r[e_direction];
+            tmp[ir] = tmp[ir] * exp(I*phase);
+            
+          }
+          ft.forward(&tmp[0],c_.valptr(norig*c_.mloc()));
+	  }
+          
+    }
+
+
+}
+
+

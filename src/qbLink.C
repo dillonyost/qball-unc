@@ -86,6 +86,7 @@ using namespace std;
 #include "UnlockCmd.h"
 #include "SetVelCmd.h"
 #include "ComputeMLWFCmd.h"
+#include "ApplyElectricFieldPulseCmd.h"
 #include "AngleCmd.h"
 #include "ConstraintCmd.h"
 #include "DistanceCmd.h"
@@ -353,6 +354,7 @@ void qbLink::init(void) {
   ui->addCmd(new LockCmd(s));
   ui->addCmd(new UnlockCmd(s));
   ui->addCmd(new ComputeMLWFCmd(s));
+  ui->addCmd(new ApplyElectricFieldPulseCmd(s));
   ui->addCmd(new ConstraintCmd(s));
   ui->addCmd(new ShiftWFCmd(s));
   ui->addCmd(new WFPhaseRealCmd(s));
