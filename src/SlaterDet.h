@@ -116,6 +116,7 @@ class SlaterDet {
   void compute_kinetic_energy_density(FourierTransform& ft, Basis& vbasis, double weight, double* tau) const; // YY
 
   void rs_mul_add(FourierTransform& ft, const double* v, SlaterDet& sdp) const;
+  void rs_mul_add(FourierTransform& ft, const std::complex<double> * v, SlaterDet& sdp) const;
 
   void kinetic_hpsi(FourierTransform& ft, const double* vxc_tau, SlaterDet& sdp) const; // YY
 

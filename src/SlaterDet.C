@@ -1093,6 +1093,45 @@ void SlaterDet::rs_mul_add(FourierTransform& ft,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+void SlaterDet::rs_mul_add(FourierTransform& ft, 
+ const std::complex<double>* v, SlaterDet& sdp) const {
+
+  // transform states to real space, multiply states by v[r] in real space
+  // transform back to reciprocal space and add to sdp
+  // sdp[n] += v * sd[n]
+  // YY: for complex potential.
+  // YY: used for absorbing potential
+  
+  vector<complex<double> > tmp(ft.np012loc());
+  vector<complex<double> > ctmp(2*c_.mloc());
+  
+  const int np012loc = ft.np012loc();
+  const int mloc = c_.mloc();
+  double* p = (double*) &tmp[0];
+  double* dcp = (double*) sdp.c().valptr();
+  complex<double>* zcp = sdp.c().valptr();
+
+  if ( basis_->real() ) {
+    // not possible
+  }
+  else {
+    // only one transform at a time
+    for ( int n = 0; n < nstloc(); n++ ) {
+      ft.backward(c_.cvalptr(n*mloc),&tmp[0]);
+#pragma omp parallel for
+      for ( int i = 0; i < np012loc; i++ )
+        tmp[i] *= v[i];
+      ft.forward(&tmp[0], &ctmp[0]);
+      int len = mloc;
+      int inc1 = 1;
+      complex<double> alpha = complex<double>(1.0,0.0);
+      zaxpy(&len,&alpha,&ctmp[0],&inc1,&zcp[n*mloc],&inc1);
+    }
+  }
+  
+}
+
+////////////////////////////////////////////////////////////////////////////////
 void SlaterDet::kinetic_hpsi(FourierTransform& ft,
   const double* vxc_tau, SlaterDet& sdp) const
 {
