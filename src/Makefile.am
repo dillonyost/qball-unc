@@ -271,6 +271,7 @@ noinst_HEADERS =                            \
 	XCFunctional.h                      \
 	Xc.h                                \
 	XCPotential.h                       \
+	AbsorbingPotential.h                       \
 	XMLFile.h                           \
 	XMLGFPreprocessor.h
 
@@ -306,6 +307,7 @@ libqbLink_a_SOURCES =                       \
 	SpeciesReader.C                     \
 	SpeciesHandler.C                    \
 	XCPotential.C                       \
+	AbsorbingPotential.C                       \
 	LDAFunctional.C                     \
         LIBXCFunctional.C                   \
 	PBEFunctional.C                     \
