@@ -139,6 +139,7 @@ using namespace std;
 #include "WfExtrap.h"
 #include "WFPhaseRealVar.h"
 #include "Xc.h"
+#include "AbsorbingPotentialVar.h"
 #include "Nparallelkpts.h"
 #include "Nkpoints.h"
 #include "IPrint.h"

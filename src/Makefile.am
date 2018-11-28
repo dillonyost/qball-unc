@@ -270,6 +270,7 @@ noinst_HEADERS =                            \
 	WFPhaseRealVar.h                    \
 	XCFunctional.h                      \
 	Xc.h                                \
+        AbsorbingPotentialVar.h             \
 	XCPotential.h                       \
 	AbsorbingPotential.h                       \
 	XMLFile.h                           \
