@@ -50,6 +50,7 @@ class Wavefunction;
 class UnitCell;
 class FourierTransform;
 class XCPotential;
+class AbsorbingPotential;
 class NonLocalPotential;
 class ConfinementPotential;
 class EnthalpyFunctional;
@@ -71,6 +72,7 @@ class EnergyFunctional
   vector<vector<FourierTransform*> > ft;
   StructureFactor sf;
   XCPotential* xcp_;
+  AbsorbingPotential* abp_;
   EnthalpyFunctional* epvf;
   ElectricEnthalpy* el_enth_; //DCY
   vector<vector<NonLocalPotential*> > nlp;
@@ -101,6 +103,7 @@ class EnergyFunctional
   const XCPotential* xcp() { return xcp_; } 
 
   vector<vector<double> > v_r;
+  vector<complex<double>> vabs_r; // YY absorbing potential
   vector<vector<double> > vxc_tau; // YY metagga
 
   vector<vector<complex<double> > > vxc_g;

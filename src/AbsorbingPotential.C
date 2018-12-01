@@ -36,6 +36,7 @@
 #include "FourierTransform.h"
 #include "D3vector.h"
 #include <cassert>
+#include <iostream>
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -48,17 +49,17 @@ AbsorbingPotential::AbsorbingPotential(ChargeDensity& cd):
 ////////////////////////////////////////////////////////////////////////////////
 void AbsorbingPotential::initialize()
 {
-  R0_ = 12.0;
-  deltaR_ = 20.0;
+  R0_ = 7.0;
+  deltaR_ = 14.0;
   W0_ = 4.0 / 27.2114;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void AbsorbingPotential::update(vector<complex<double>> & vabs)
 {
-  int np0 = vbasis_.np(0);
-  int np1 = vbasis_.np(1);
-  int np2 = vbasis_.np(2);
+  int np0 = vft_.np0();
+  int np1 = vft_.np1();
+  int np2 = vft_.np2();
   const complex<double> I(0.0,1.0);
   
   assert(vbasis_.cell().volume() > 0.0);
@@ -79,10 +80,15 @@ void AbsorbingPotential::update(vector<complex<double>> & vabs)
     j = idxx / np0;
     idxx = idxx - np0 * j;
     i = idxx;
+    //r = ( cell.a(0) / np0 * i
+    //   + cell.a(1) / np1 * j
+    //   + cell.a(2) / np2 * k ) - (cell.a(0) + cell.a(1) + cell.a(2)) / 2.0 ;
     r = ( cell.a(0) / np0 * i
        + cell.a(1) / np1 * j
-       + cell.a(2) / np2 * k ) - (cell.a(0) + cell.a(1) + cell.a(2)) / 2.0 ;
+       + cell.a(2) / np2 * k ) ;
+    //cout << r << endl;
     //r_length = length(r);
+    cell.fold_in_ws(r);
     if (length(r) < R0 || length(r) > R0+deltaR) {
       vabs[ir] = complex<double>(0.0, 0.0);
     } else 

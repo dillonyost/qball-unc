@@ -392,6 +392,7 @@ int main(int argc, char **argv, char **envp)
   ui->addVar(new WfDyn(s));
   ui->addVar(new WfExtrap(s));
   ui->addVar(new Xc(s));
+  ui->addVar(new AbsorbingPotentialVar(s));
   ui->addVar(new Nparallelkpts(s));
   ui->addVar(new Nkpoints(s));
   ui->addVar(new IPrint(s));
