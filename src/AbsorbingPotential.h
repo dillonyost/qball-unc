@@ -52,8 +52,14 @@ class AbsorbingPotential
   Basis& vbasis_;
 
   string absorbing_potential_type_;
-
+  //
   double spherical_R0_, spherical_deltaR_, spherical_W0_;
+  //
+  double local_spherical_R0_, local_spherical_W0_;
+  double local_spherical_center_x_;
+  double local_spherical_center_y_;
+  double local_spherical_center_z_;
+  //
 
   void initialize(const string absorbing_potential);
   

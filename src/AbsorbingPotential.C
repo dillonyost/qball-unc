@@ -77,7 +77,19 @@ void AbsorbingPotential::initialize(const string absorbing_potential)
       cout << "R0: " << spherical_R0_ << " deltaR: " << spherical_deltaR_ 
            << " W0: " << spherical_W0_ << endl;
     }
-  } else {
+  } else if (absorbing_potential_type_ == "local_spherical" && n == 6) {
+    local_spherical_center_x_ = atof(absorbing_potential_vector[1].c_str());
+    local_spherical_center_y_ = atof(absorbing_potential_vector[2].c_str());
+    local_spherical_center_z_ = atof(absorbing_potential_vector[3].c_str());
+    local_spherical_R0_ = atof(absorbing_potential_vector[4].c_str());
+    local_spherical_W0_ = atof(absorbing_potential_vector[5].c_str());
+    if ( oncoutpe ) {
+      cout << "YY: absorbing potential " << absorbing_potential_type_ << endl;
+      cout << "R0: " << spherical_R0_ << " deltaR: " << spherical_deltaR_ 
+           << " W0: " << spherical_W0_ << endl;
+    }
+  } else
+  {
     if ( oncoutpe ) {
       cout << "YY error: absorbing_potential bad parameters" << endl;
     }
@@ -128,6 +140,47 @@ void AbsorbingPotential::update(vector<complex<double>> & vabs)
       {
         // length(r) > R0
         vabs[ir] = -I * W0 * (length(r)-R0)/deltaR;
+      }
+      
+    }
+  } else if (absorbing_potential_type_ == "local_spherical") {
+    double center_x = local_spherical_center_x_;
+    double center_y = local_spherical_center_y_;
+    double center_z = local_spherical_center_z_;
+    double R0 = local_spherical_R0_;
+    double W0 = local_spherical_W0_;
+
+    int idx0 = vft_.np0() * vft_.np1() * vft_.np2_first();
+    int idxx, i, j, k;
+    D3vector r;
+    D3vector center;
+    center[0] = center_x;
+    center[1] = center_y;
+    center[2] = center_z;
+
+
+    for ( int ir = 0; ir < np012loc; ir++ ) {
+      idxx = idx0 + ir;
+      k = idxx / ( np0 * np1 );
+      idxx = idxx - ( np0 * np1 ) * k;
+      j = idxx / np0;
+      idxx = idxx - np0 * j;
+      i = idxx;
+      //r = ( cell.a(0) / np0 * i
+      //   + cell.a(1) / np1 * j
+      //   + cell.a(2) / np2 * k ) - (cell.a(0) + cell.a(1) + cell.a(2)) / 2.0 ;
+      r = ( cell.a(0) / np0 * i
+         + cell.a(1) / np1 * j
+         + cell.a(2) / np2 * k ) - center;
+      //cout << r << endl;
+      //r_length = length(r);
+      cell.fold_in_ws(r);
+      if (length(r) < R0) {
+        vabs[ir] = -I * W0 * (R0-length(r))/R0;
+      } else 
+      {
+        // length(r) > R0
+        vabs[ir] = complex<double>(0.0, 0.0);
       }
       
     }
