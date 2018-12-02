@@ -139,6 +139,7 @@ using namespace std;
 #include "WfExtrap.h"
 #include "WFPhaseRealVar.h"
 #include "Xc.h"
+#include "AbsorbingPotentialVar.h"
 #include "Nparallelkpts.h"
 #include "Nkpoints.h"
 #include "IPrint.h"
@@ -397,6 +398,7 @@ void qbLink::init(void) {
   ui->addVar(new WfDiag(s));
   ui->addVar(new WfDyn(s));
   ui->addVar(new Xc(s));
+  ui->addVar(new AbsorbingPotentialVar(s));
   ui->addVar(new Nparallelkpts(s));
   ui->addVar(new Nkpoints(s));
   ui->addVar(new IPrint(s));

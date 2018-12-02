@@ -130,6 +130,9 @@ struct Control
   string esm_bc;
   double esm_w;
 
+  bool has_absorbing_potential; // YY: whether absorbing potential
+  string absorbing_potential; // YY: absorbing potential informations
+
   std::string fcp_thermostat;
   double fcp_th_temp;
   double fcp_th_time;
