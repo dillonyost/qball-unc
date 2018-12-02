@@ -51,13 +51,15 @@ class AbsorbingPotential
   FourierTransform& vft_;
   Basis& vbasis_;
 
-  double R0_, deltaR_, W0_;
+  string absorbing_potential_type_;
 
-  void initialize();
+  double spherical_R0_, spherical_deltaR_, spherical_W0_;
+
+  void initialize(const string absorbing_potential);
   
   public:
 
-  AbsorbingPotential(ChargeDensity& cd);
+  AbsorbingPotential(ChargeDensity& cd, const string absorbing_potential);
   ~AbsorbingPotential();
   void update(vector<complex<double>> & vabs);
 };

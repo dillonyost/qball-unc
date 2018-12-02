@@ -40,18 +40,49 @@
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
-AbsorbingPotential::AbsorbingPotential(ChargeDensity& cd):
+AbsorbingPotential::AbsorbingPotential(ChargeDensity& cd, const string absorbing_potential):
     cd_(cd), vbasis_(*cd_.vbasis()), vft_(*cd_.vft())
 {
-   initialize();
+   initialize(absorbing_potential);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void AbsorbingPotential::initialize()
+void AbsorbingPotential::initialize(const string absorbing_potential)
 {
-  R0_ = 7.0;
-  deltaR_ = 14.0;
-  W0_ = 4.0 / 27.2114;
+  //
+  //spherical_R0_ = 7.0;
+  //spherical_deltaR_ = 14.0;
+  //spherical_W0_ = 4.0 / 27.2114;
+  //
+  const bool oncoutpe = cd_.vcontext().oncoutpe();
+  string tempbuf;
+  stringstream ss(absorbing_potential);
+  vector <string> absorbing_potential_vector;
+
+
+  int n = 0;
+  while ( ss >> tempbuf )
+  {
+    absorbing_potential_vector.push_back(tempbuf);
+    n++;
+  }
+
+  absorbing_potential_type_ = absorbing_potential_vector[0];
+  if (absorbing_potential_type_ == "spherical" && n == 4) {
+    spherical_R0_ = atof(absorbing_potential_vector[1].c_str());
+    spherical_deltaR_ = atof(absorbing_potential_vector[2].c_str());
+    spherical_W0_ = atof(absorbing_potential_vector[3].c_str());
+    if ( oncoutpe ) {
+      cout << "YY: absorbing potential " << absorbing_potential_type_ << endl;
+      cout << "R0: " << spherical_R0_ << " deltaR: " << spherical_deltaR_ 
+           << " W0: " << spherical_W0_ << endl;
+    }
+  } else {
+    if ( oncoutpe ) {
+      cout << "YY error: absorbing_potential bad parameters" << endl;
+    }
+    throw exception();
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -65,38 +96,41 @@ void AbsorbingPotential::update(vector<complex<double>> & vabs)
   assert(vbasis_.cell().volume() > 0.0);
   UnitCell cell = vbasis_.cell();
   const int np012loc = vft_.np012loc();
-  double R0 = R0_;
-  double deltaR = deltaR_;
-  double W0 = W0_;
 
-  int idx0 = vft_.np0() * vft_.np1() * vft_.np2_first();
-  int idxx, i, j, k;
-  D3vector r;
+  if (absorbing_potential_type_ == "spherical") {
+    double R0 = spherical_R0_;
+    double deltaR = spherical_deltaR_;
+    double W0 = spherical_W0_;
 
-  for ( int ir = 0; ir < np012loc; ir++ ) {
-    idxx = idx0 + ir;
-    k = idxx / ( np0 * np1 );
-    idxx = idxx - ( np0 * np1 ) * k;
-    j = idxx / np0;
-    idxx = idxx - np0 * j;
-    i = idxx;
-    //r = ( cell.a(0) / np0 * i
-    //   + cell.a(1) / np1 * j
-    //   + cell.a(2) / np2 * k ) - (cell.a(0) + cell.a(1) + cell.a(2)) / 2.0 ;
-    r = ( cell.a(0) / np0 * i
-       + cell.a(1) / np1 * j
-       + cell.a(2) / np2 * k ) ;
-    //cout << r << endl;
-    //r_length = length(r);
-    cell.fold_in_ws(r);
-    if (length(r) < R0 || length(r) > R0+deltaR) {
-      vabs[ir] = complex<double>(0.0, 0.0);
-    } else 
-    {
-      // length(r) > R0
-      vabs[ir] = -I * W0 * (length(r)-R0)/deltaR;
+    int idx0 = vft_.np0() * vft_.np1() * vft_.np2_first();
+    int idxx, i, j, k;
+    D3vector r;
+
+    for ( int ir = 0; ir < np012loc; ir++ ) {
+      idxx = idx0 + ir;
+      k = idxx / ( np0 * np1 );
+      idxx = idxx - ( np0 * np1 ) * k;
+      j = idxx / np0;
+      idxx = idxx - np0 * j;
+      i = idxx;
+      //r = ( cell.a(0) / np0 * i
+      //   + cell.a(1) / np1 * j
+      //   + cell.a(2) / np2 * k ) - (cell.a(0) + cell.a(1) + cell.a(2)) / 2.0 ;
+      r = ( cell.a(0) / np0 * i
+         + cell.a(1) / np1 * j
+         + cell.a(2) / np2 * k ) ;
+      //cout << r << endl;
+      //r_length = length(r);
+      cell.fold_in_ws(r);
+      if (length(r) < R0 || length(r) > R0+deltaR) {
+        vabs[ir] = complex<double>(0.0, 0.0);
+      } else 
+      {
+        // length(r) > R0
+        vabs[ir] = -I * W0 * (length(r)-R0)/deltaR;
+      }
+      
     }
-    
   }
 }
 
