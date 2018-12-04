@@ -1,0 +1,4 @@
+set force_complex_wf ON
+set xc LIBXC LDA_X:1.0 LDA_C_PZ_MOD:1.0
+stopping.sys
+quit
