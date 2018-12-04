@@ -1,0 +1,104 @@
+#! /usr/bin/python
+#reads dipole data and calculates absorption
+import numpy as np
+from numpy import genfromtxt
+from numpy import linalg
+import sys
+import os
+import textwrap
+import fileinput
+import math
+from scipy.fftpack import fft, fftfreq
+
+#data should be in atomic units
+#input file format: time, x dipole, y dipole, z dipole
+filename = raw_input( "Dipole file: " )
+rt = genfromtxt(filename)
+length = len(rt)
+
+#name output file
+#outname = raw_input( "Name output file: " )
+outname = raw_input( "Output file: " )
+
+#arrays for time and dipole, respectively
+t = rt[:int(length),0]
+x = rt[:int(length),1]
+y = rt[:int(length),2]
+z = rt[:int(length),3]
+f = open(outname, 'w')
+
+# add damping to give Lorentzian lineshape with FWHM of (2/camp_const)
+damp_const = float(raw_input( "Damping constant: " ))
+damp = np.exp(-(t-t[0])/damp_const)
+x = (x-np.average(x)) * damp 
+y = (y-np.average(y)) * damp 
+z = (z-np.average(z)) * damp 
+
+kick_strength = float(raw_input( "Kick strength: "))
+# pad signal with zeros
+zero = np.linspace(0,0,50000)
+x = np.hstack((x,zero))
+y = np.hstack((y,zero))
+z = np.hstack((z,zero))
+
+# do fourier transform
+#sample = float(raw_input( "Sampling constant: "))
+lengthnew = x.shape[0]
+fwx = fft(x,lengthnew)
+fwy = fft(y,lengthnew)
+fwz = fft(z,lengthnew)
+fwx_re = np.real(fwx)
+fwx_im = (np.imag(fwx))
+fwx_abs = abs(fwx)
+fwy_re = np.real(fwy)
+fwy_im = (np.imag(fwy))
+fwy_abs = abs(fwy)
+fwz_re = np.real(fwz)
+fwz_im = (np.imag(fwz))
+fwz_abs = abs(fwz)
+
+#determine frequency range
+n = len(fwz_im) 
+timestep = t[1] - t[0]
+w = fftfreq(n,d=timestep)*2.0*np.pi
+
+#rotate spectrum
+def rotate_spectrum (re, im, ab):
+	r = math.sqrt(re**2 + im**2)
+	if abs(r - ab) > 1e-6:
+		raise Exception ("abs not equal to sqrt(re^2 + im^2)")
+	
+	angle = abs(math.atan2 (im, re))		
+
+	if angle > math.pi:
+		raise Exception ("atan2 out of range")
+	re_out = ab * math.cos (angle)
+	im_out = ab * math.sin (angle)
+	return im_out
+
+fwx_rot = []
+fwy_rot = []
+fwz_rot = []
+for i in range(0,n):
+	fwx_rot.append(rotate_spectrum( fwx_re[i], fwx_im[i], fwx_abs[i]))
+	fwy_rot.append(rotate_spectrum( fwy_re[i], fwy_im[i], fwy_abs[i]))
+	fwz_rot.append(rotate_spectrum( fwz_re[i], fwz_im[i], fwz_abs[i]))
+	#fwx_rot.append(fwx_im[i])
+	#fwy_rot.append(fwy_im[i])
+	#fwz_rot.append(fwz_im[i])
+
+#dipole strength equation
+Sx = (4.0*w*np.pi*fwx_rot)/(3.0*137*kick_strength)
+Sy = (4.0*w*np.pi*fwy_rot)/(3.0*137*kick_strength)
+Sz = (4.0*w*np.pi*fwz_rot)/(3.0*137*kick_strength)
+#convert frequencies to eV
+w = (w*27.2114)
+E = 1240/(w+0.00000001)
+
+f = open(outname, 'w')
+sys.stdout = f
+
+# prints energy, wavelength, x-direction absorption, y- "" , z - "", sum
+# print "damp consant " + str(float(damp_const)), "kick " + str(float(kick_strength))
+for i in range(0,n):
+	print w[i], E[i], Sx[i], Sy[i], Sz[i], Sx[i] + Sy[i] + Sz[i]

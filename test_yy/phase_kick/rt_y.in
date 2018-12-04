@@ -1,0 +1,42 @@
+set force_complex_wf ON
+set xc LDA
+set ecut 40
+set nrowmax 44
+
+set cell 20 0 0     0 20 0      0 0 20
+species oxygen   O_HSCV_LDA-1.0.xml
+species hydrogen H_HSCV_LDA-1.0.xml
+atom O1 oxygen 0 -0.000027231 0.27619
+atom H1 hydrogen 0 1.43622 -0.82857
+atom H2 hydrogen 0 -1.43619 -0.82857
+
+#set isolated_electrostatic mt
+set absorbing_potential test
+
+set wf_dyn PSDA
+set ecutprec 10
+randomize_wf
+set threshold_scf 1.E-10 10
+run 0 300
+#compute_mlwf
+
+apply_electric_field_pulse 1 0.0001
+
+set caldipfreq 1
+
+set wf_dyn ETRS
+#set wf_diag TDMLWF
+set atoms_dyn IMPULSIVE
+set dt 0.005
+set TD_dt 0.005
+#set polarization TDMLWF
+#set e_field 0.01 0 0
+#run 1 1
+#set e_field 0 0 0
+#set polarization OFF
+
+set dt 0.05
+set TD_dt 0.05
+
+run 4000 1
+quit
