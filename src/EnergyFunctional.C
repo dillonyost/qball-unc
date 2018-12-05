@@ -143,7 +143,9 @@ EnergyFunctional::EnergyFunctional( Sample& s, const Wavefunction& wf, ChargeDen
   s_.ctrl.mgga = (xcp_->xcf()->ismGGA());
 
   //
-  abp_ = new AbsorbingPotential(cd_,s_.ctrl.absorbing_potential);
+  if (s_.ctrl.has_absorbing_potential) {
+    abp_ = new AbsorbingPotential(cd_,s_.ctrl.absorbing_potential);
+  }
 
   if ( s_.ctxt_.mype()==0 ) {
     //cout << s_.ctrl.mgga << endl;
